@@ -16,7 +16,7 @@ package org.eclipse.hawkbit.ui.themes;
  */
 public final class HawkbitTheme {
 
-    public static final String THEME_NAME = "hawkbit";
+    public static final String THEME_NAME = "bitdove";
 
     public static final String WIDGET_SET_NAME = "org.eclipse.hawkbit.ui.AppWidgetSet";
 

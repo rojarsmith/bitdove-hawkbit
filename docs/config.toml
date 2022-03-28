@@ -15,7 +15,10 @@ metadataformat = "toml"
 canonifyurls = false
 
 [markup]
-  defaultMarkdownHandler = "blackfriday"
+  defaultMarkdownHandler = "goldmark"
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
 
 [markup.highlight]
 	codeFences = false

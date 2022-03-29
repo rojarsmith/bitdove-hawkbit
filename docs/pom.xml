@@ -29,7 +29,7 @@
          <id>windows</id>
          <activation>
             <os>
-               <family>Windows</family>
+               <family>windows</family>
             </os>
          </activation>
          <build>
@@ -75,6 +75,7 @@
                            <executable>cmd</executable>
                            <workingDirectory>${project.basedir}</workingDirectory>
                            <arguments>
+						      <argument>/c</argument>
                               <argument>install-theme.sh</argument>
                            </arguments>
                         </configuration>
@@ -103,6 +104,7 @@
                            <executable>cmd</executable>
                            <workingDirectory>${project.basedir}</workingDirectory>
                            <arguments>
+						      <argument>/c</argument>
                               <argument>cleanup.sh</argument>
                            </arguments>
                         </configuration>
@@ -117,7 +119,7 @@
          <id>non-windows</id>
          <activation>
             <os>
-               <family>!Windows</family>
+               <family>!windows</family>
             </os>
          </activation>
          <build>

@@ -13,7 +13,7 @@ import org.eclipse.hawkbit.tenancy.configuration.TenantConfigurationProperties.T
 import org.eclipse.hawkbit.ui.UiProperties;
 import org.eclipse.hawkbit.ui.common.builder.FormComponentBuilder;
 import org.eclipse.hawkbit.ui.common.data.proxies.ProxySystemConfigRollout;
-import org.eclipse.hawkbit.ui.tenantconfiguration.rollout.ApprovalConfigurationItem;
+import org.eclipse.hawkbit.ui.tenantconfiguration.ui.ShowConfigurationItem;
 import org.eclipse.hawkbit.ui.utils.UIComponentIdProvider;
 import org.eclipse.hawkbit.ui.utils.VaadinMessageSource;
 
@@ -28,71 +28,68 @@ import com.vaadin.ui.VerticalLayout;
  */
 public class UiConfigurationView extends BaseConfigurationView<ProxySystemConfigRollout> {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private final VaadinMessageSource i18n;
-    private final UiProperties uiProperties;
-    private final ApprovalConfigurationItem approvalConfigurationItem;
+	private final VaadinMessageSource i18n;
+	@SuppressWarnings("unused")
+	private final UiProperties uiProperties;
+	private final ShowConfigurationItem approvalConfigurationItem;
 
-    UiConfigurationView(final VaadinMessageSource i18n, final UiProperties uiProperties,
-            final TenantConfigurationManagement tenantConfigurationManagement) {
-        super(tenantConfigurationManagement);
-        this.i18n = i18n;
-        this.uiProperties = uiProperties;
-        this.approvalConfigurationItem = new ApprovalConfigurationItem(i18n);
-    }
+	UiConfigurationView(final VaadinMessageSource i18n, final UiProperties uiProperties,
+			final TenantConfigurationManagement tenantConfigurationManagement) {
+		super(tenantConfigurationManagement);
+		this.i18n = i18n;
+		this.uiProperties = uiProperties;
+		this.approvalConfigurationItem = new ShowConfigurationItem(i18n);
+	}
 
-    @Override
-    public void afterPropertiesSet() {
-        super.afterPropertiesSet();
-        init();
-    }
+	@Override
+	public void afterPropertiesSet() {
+		super.afterPropertiesSet();
+		init();
+	}
 
-    private void init() {
-        final Panel rootPanel = new Panel();
-        rootPanel.setSizeFull();
-        rootPanel.addStyleName("config-panel");
+	private void init() {
+		final Panel rootPanel = new Panel();
+		rootPanel.setSizeFull();
+		rootPanel.addStyleName("config-panel");
 
-        final VerticalLayout vLayout = new VerticalLayout();
-        vLayout.setSpacing(false);
-        vLayout.setMargin(true);
-        vLayout.setSizeFull();
+		final VerticalLayout vLayout = new VerticalLayout();
+		vLayout.setSpacing(false);
+		vLayout.setMargin(true);
+		vLayout.setSizeFull();
 
-        final Label header = new Label(i18n.getMessage("configuration.ui.title"));
-        header.addStyleName("config-panel-header");
-        vLayout.addComponent(header);
+		final Label header = new Label(i18n.getMessage("configuration.ui.title"));
+		header.addStyleName("config-panel-header");
+		vLayout.addComponent(header);
 
-        final GridLayout gridLayout = new GridLayout(3, 1);
-        gridLayout.setSpacing(true);
-        gridLayout.setColumnExpandRatio(1, 1.0F);
-        gridLayout.setSizeFull();
+		final GridLayout gridLayout = new GridLayout(3, 1);
+		gridLayout.setSpacing(true);
+		gridLayout.setColumnExpandRatio(1, 1.0F);
+		gridLayout.setSizeFull();
 
-        final CheckBox approvalCheckbox = FormComponentBuilder.createCheckBox(
-                UIComponentIdProvider.ROLLOUT_APPROVAL_ENABLED_CHECKBOX, getBinder(),
-                ProxySystemConfigRollout::isRolloutApproval, ProxySystemConfigRollout::setRolloutApproval);
+		final CheckBox approvalCheckbox = FormComponentBuilder.createCheckBox(
+				UIComponentIdProvider.ROLLOUT_APPROVAL_ENABLED_CHECKBOX, getBinder(),
+				ProxySystemConfigRollout::isRolloutApproval, ProxySystemConfigRollout::setRolloutApproval);
 
-        gridLayout.addComponent(approvalCheckbox, 0, 0);
-        gridLayout.addComponent(approvalConfigurationItem, 1, 0);
-//        final Link linkToApprovalHelp = SPUIComponentProvider.getHelpLink(i18n,
-//                uiProperties.getLinks().getDocumentation().getRollout());
-//        gridLayout.addComponent(linkToApprovalHelp, 2, 0);
-//        gridLayout.setComponentAlignment(linkToApprovalHelp, Alignment.BOTTOM_RIGHT);
+		gridLayout.addComponent(approvalCheckbox, 0, 0);
+		gridLayout.addComponent(approvalConfigurationItem, 1, 0);
 
-        vLayout.addComponent(gridLayout);
-        rootPanel.setContent(vLayout);
-        setCompositionRoot(rootPanel);
-    }
+		vLayout.addComponent(gridLayout);
+		rootPanel.setContent(vLayout);
+		setCompositionRoot(rootPanel);
+	}
 
-    @Override
-    protected ProxySystemConfigRollout populateSystemConfig() {
-        ProxySystemConfigRollout configBean = new ProxySystemConfigRollout();
-        configBean.setRolloutApproval(readConfigOption(TenantConfigurationKey.ROLLOUT_APPROVAL_ENABLED));
-        return configBean;
-    }
+	@Override
+	protected ProxySystemConfigRollout populateSystemConfig() {
+		ProxySystemConfigRollout configBean = new ProxySystemConfigRollout();
+		configBean.setRolloutApproval(readConfigOption(TenantConfigurationKey.ROLLOUT_APPROVAL_ENABLED));
+		return configBean;
+	}
 
-    @Override
-    public void save() {
-        writeConfigOption(TenantConfigurationKey.ROLLOUT_APPROVAL_ENABLED, getBinderBean().isRolloutApproval());
-    }
+	@Override
+	public void save() {
+		writeConfigOption(TenantConfigurationKey.ROLLOUT_APPROVAL_ENABLED, getBinderBean().isRolloutApproval());
+	}
 
 }

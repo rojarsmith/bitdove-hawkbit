@@ -147,4 +147,25 @@ public class SystemConfigViewAutoConfiguration {
         return new PollingConfigurationView(i18n, uiProperties, tenantConfigurationManagement);
     }
 
+    /**
+     * Default Bean of configuration view to set the UI specific configurations
+     *
+     * @param i18n
+     *            VaadinMessageSource
+     * @param uiProperties
+     *            UiProperties
+     * @param tenantConfigurationManagement
+     *            TenantConfigurationManagement
+     * @return UiConfigurationView to be shown in the Tenant Configuration Page
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    @ViewScope
+    @Order(value = 6)
+    UiConfigurationView uiConfigurationView(final VaadinMessageSource i18n,
+    		final UiProperties uiProperties,
+            final TenantConfigurationManagement tenantConfigurationManagement) {
+        return new UiConfigurationView(i18n, uiProperties, tenantConfigurationManagement);
+    }
+    
 }

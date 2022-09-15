@@ -1525,6 +1525,12 @@ public final class UIComponentIdProvider {
     public static final String ROLLOUT_APPROVAL_ENABLED_CHECKBOX = "rollout.approve.enabled.checkbox";
 
     /**
+     * Configuration checkbox for
+     * {@link TenantConfigurationKey#UI_SHOW_ID_DEFAULT_ENABLED}
+     */
+	public static final String UI_SHOW_ID_DEFAULT_ENABLED_CHECKBOX = "ui.show.id.default.enabled.checkbox";
+    
+    /**
      * Id of the rollout approval remark field
      */
     public static final String ROLLOUT_APPROVAL_REMARK_FIELD_ID = "rollout.approve.remark";

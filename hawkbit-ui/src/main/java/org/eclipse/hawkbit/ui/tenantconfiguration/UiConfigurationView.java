@@ -1,10 +1,5 @@
 /**
  * Copyright (c) 2022 Rojar Smith.
- *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
  */
 package org.eclipse.hawkbit.ui.tenantconfiguration;
 
@@ -12,7 +7,7 @@ import org.eclipse.hawkbit.repository.TenantConfigurationManagement;
 import org.eclipse.hawkbit.tenancy.configuration.TenantConfigurationProperties.TenantConfigurationKey;
 import org.eclipse.hawkbit.ui.UiProperties;
 import org.eclipse.hawkbit.ui.common.builder.FormComponentBuilder;
-import org.eclipse.hawkbit.ui.common.data.proxies.ProxySystemConfigRollout;
+import org.eclipse.hawkbit.ui.common.data.proxies.ProxySystemConfigUi;
 import org.eclipse.hawkbit.ui.tenantconfiguration.ui.ShowConfigurationItem;
 import org.eclipse.hawkbit.ui.utils.UIComponentIdProvider;
 import org.eclipse.hawkbit.ui.utils.VaadinMessageSource;
@@ -26,21 +21,21 @@ import com.vaadin.ui.VerticalLayout;
 /**
  * Provides configuration of the UI.
  */
-public class UiConfigurationView extends BaseConfigurationView<ProxySystemConfigRollout> {
+public class UiConfigurationView extends BaseConfigurationView<ProxySystemConfigUi> {
 
 	private static final long serialVersionUID = 1L;
 
 	private final VaadinMessageSource i18n;
 	@SuppressWarnings("unused")
 	private final UiProperties uiProperties;
-	private final ShowConfigurationItem approvalConfigurationItem;
+	private final ShowConfigurationItem showConfigurationItem;
 
 	UiConfigurationView(final VaadinMessageSource i18n, final UiProperties uiProperties,
 			final TenantConfigurationManagement tenantConfigurationManagement) {
 		super(tenantConfigurationManagement);
 		this.i18n = i18n;
 		this.uiProperties = uiProperties;
-		this.approvalConfigurationItem = new ShowConfigurationItem(i18n);
+		this.showConfigurationItem = new ShowConfigurationItem(i18n);
 	}
 
 	@Override
@@ -69,11 +64,11 @@ public class UiConfigurationView extends BaseConfigurationView<ProxySystemConfig
 		gridLayout.setSizeFull();
 
 		final CheckBox approvalCheckbox = FormComponentBuilder.createCheckBox(
-				UIComponentIdProvider.ROLLOUT_APPROVAL_ENABLED_CHECKBOX, getBinder(),
-				ProxySystemConfigRollout::isRolloutApproval, ProxySystemConfigRollout::setRolloutApproval);
+				UIComponentIdProvider.UI_SHOW_ID_DEFAULT_ENABLED_CHECKBOX, getBinder(),
+				ProxySystemConfigUi::isUiShowIdDefault, ProxySystemConfigUi::setUiShowIdDefault);
 
 		gridLayout.addComponent(approvalCheckbox, 0, 0);
-		gridLayout.addComponent(approvalConfigurationItem, 1, 0);
+		gridLayout.addComponent(showConfigurationItem, 1, 0);
 
 		vLayout.addComponent(gridLayout);
 		rootPanel.setContent(vLayout);
@@ -81,15 +76,15 @@ public class UiConfigurationView extends BaseConfigurationView<ProxySystemConfig
 	}
 
 	@Override
-	protected ProxySystemConfigRollout populateSystemConfig() {
-		ProxySystemConfigRollout configBean = new ProxySystemConfigRollout();
-		configBean.setRolloutApproval(readConfigOption(TenantConfigurationKey.ROLLOUT_APPROVAL_ENABLED));
+	protected ProxySystemConfigUi populateSystemConfig() {
+		ProxySystemConfigUi configBean = new ProxySystemConfigUi();
+		configBean.setUiShowIdDefault(readConfigOption(TenantConfigurationKey.UI_SHOW_ID_DEFAULT_ENABLED));
 		return configBean;
 	}
 
 	@Override
 	public void save() {
-		writeConfigOption(TenantConfigurationKey.ROLLOUT_APPROVAL_ENABLED, getBinderBean().isRolloutApproval());
+		writeConfigOption(TenantConfigurationKey.UI_SHOW_ID_DEFAULT_ENABLED, getBinderBean().isUiShowIdDefault());
 	}
 
 }

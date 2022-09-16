@@ -1,4 +1,5 @@
 /**
+ * Copyright (c) 2022 Rojar Smith.
  * Copyright (c) 2015 Bosch Software Innovations GmbH and others.
  *
  * All rights reserved. This program and the accompanying materials
@@ -15,6 +16,8 @@ import javax.servlet.MultipartConfigElement;
 
 import org.eclipse.hawkbit.repository.ArtifactManagement;
 import org.eclipse.hawkbit.repository.SoftwareModuleManagement;
+import org.eclipse.hawkbit.repository.TenantConfigurationManagement;
+import org.eclipse.hawkbit.security.SystemSecurityContext;
 import org.eclipse.hawkbit.ui.artifacts.ArtifactUploadState;
 import org.eclipse.hawkbit.ui.artifacts.upload.FileUploadProgress;
 import org.eclipse.hawkbit.ui.artifacts.upload.UploadDropAreaLayout;
@@ -33,107 +36,105 @@ import org.eclipse.hawkbit.ui.common.layout.listener.SelectionChangedListener;
  * Display the details of the artifacts for a selected software module.
  */
 public class ArtifactDetailsGridLayout extends AbstractGridComponentLayout {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private final ArtifactDetailsGridHeader artifactDetailsHeader;
-    private final ArtifactDetailsGrid artifactDetailsGrid;
-    private final UploadDropAreaLayout uploadDropAreaLayout;
+	private final ArtifactDetailsGridHeader artifactDetailsHeader;
+	private final ArtifactDetailsGrid artifactDetailsGrid;
+	private final UploadDropAreaLayout uploadDropAreaLayout;
 
-    private final transient SelectionChangedListener<ProxySoftwareModule> selectionChangedListener;
-    private final transient GenericEventListener<FileUploadProgress> fileUploadChangedListener;
+	private final transient SelectionChangedListener<ProxySoftwareModule> selectionChangedListener;
+	private final transient GenericEventListener<FileUploadProgress> fileUploadChangedListener;
 
-    /**
-     * Constructor for ArtifactDetailsLayout
-     *
-     * @param uiDependencies
-     *            {@link CommonUiDependencies}
-     * @param artifactUploadState
-     *            ArtifactUploadState
-     * @param artifactDetailsGridLayoutUiState
-     *            ArtifactDetailsGridLayoutUiState
-     * @param artifactManagement
-     *            ArtifactManagement
-     * @param softwareManagement
-     *            SoftwareModuleManagement
-     * @param multipartConfigElement
-     *            MultipartConfigElement
-     */
-    public ArtifactDetailsGridLayout(final CommonUiDependencies uiDependencies,
-            final ArtifactUploadState artifactUploadState,
-            final ArtifactDetailsGridLayoutUiState artifactDetailsGridLayoutUiState,
-            final ArtifactManagement artifactManagement, final SoftwareModuleManagement softwareManagement,
-            final MultipartConfigElement multipartConfigElement) {
-        this.artifactDetailsHeader = new ArtifactDetailsGridHeader(uiDependencies, artifactDetailsGridLayoutUiState);
-        this.artifactDetailsGrid = new ArtifactDetailsGrid(uiDependencies, artifactManagement);
+	/**
+	 * Constructor for ArtifactDetailsLayout
+	 *
+	 * @param uiDependencies                   {@link CommonUiDependencies}
+	 * @param artifactUploadState              ArtifactUploadState
+	 * @param artifactDetailsGridLayoutUiState ArtifactDetailsGridLayoutUiState
+	 * @param artifactManagement               ArtifactManagement
+	 * @param softwareManagement               SoftwareModuleManagement
+	 * @param multipartConfigElement           MultipartConfigElement
+	 * @param tenantConfigManagement           TenantConfigurationManagement
+	 * @param systemSecurityContext            SystemSecurityContext
+	 */
+	public ArtifactDetailsGridLayout(final CommonUiDependencies uiDependencies,
+			final ArtifactUploadState artifactUploadState,
+			final ArtifactDetailsGridLayoutUiState artifactDetailsGridLayoutUiState,
+			final ArtifactManagement artifactManagement, final SoftwareModuleManagement softwareManagement,
+			final MultipartConfigElement multipartConfigElement,
+			final TenantConfigurationManagement tenantConfigManagement,
+			final SystemSecurityContext systemSecurityContext) {
+		this.artifactDetailsHeader = new ArtifactDetailsGridHeader(uiDependencies, artifactDetailsGridLayoutUiState);
+		this.artifactDetailsGrid = new ArtifactDetailsGrid(uiDependencies, artifactManagement, tenantConfigManagement,
+				systemSecurityContext);
 
-        if (uiDependencies.getPermChecker().hasCreateRepositoryPermission()) {
-            this.uploadDropAreaLayout = new UploadDropAreaLayout(uiDependencies, artifactUploadState,
-                    multipartConfigElement, softwareManagement, artifactManagement);
+		if (uiDependencies.getPermChecker().hasCreateRepositoryPermission()) {
+			this.uploadDropAreaLayout = new UploadDropAreaLayout(uiDependencies, artifactUploadState,
+					multipartConfigElement, softwareManagement, artifactManagement);
 
-            buildLayout(artifactDetailsHeader, artifactDetailsGrid, uploadDropAreaLayout);
-        } else {
-            this.uploadDropAreaLayout = null;
+			buildLayout(artifactDetailsHeader, artifactDetailsGrid, uploadDropAreaLayout);
+		} else {
+			this.uploadDropAreaLayout = null;
 
-            buildLayout(artifactDetailsHeader, artifactDetailsGrid);
-        }
+			buildLayout(artifactDetailsHeader, artifactDetailsGrid);
+		}
 
-        final EventLayoutViewAware masterLayoutView = new EventLayoutViewAware(EventLayout.SM_LIST, EventView.UPLOAD);
-        this.selectionChangedListener = new SelectionChangedListener<>(uiDependencies.getEventBus(), masterLayoutView,
-                getMasterEntityAwareComponents());
-        this.fileUploadChangedListener = new GenericEventListener<>(uiDependencies.getEventBus(),
-                EventTopics.FILE_UPLOAD_CHANGED, this::onUploadChanged);
-    }
+		final EventLayoutViewAware masterLayoutView = new EventLayoutViewAware(EventLayout.SM_LIST, EventView.UPLOAD);
+		this.selectionChangedListener = new SelectionChangedListener<>(uiDependencies.getEventBus(), masterLayoutView,
+				getMasterEntityAwareComponents());
+		this.fileUploadChangedListener = new GenericEventListener<>(uiDependencies.getEventBus(),
+				EventTopics.FILE_UPLOAD_CHANGED, this::onUploadChanged);
+	}
 
-    private List<MasterEntityAwareComponent<ProxySoftwareModule>> getMasterEntityAwareComponents() {
-        return Arrays.asList(artifactDetailsHeader, artifactDetailsGrid.getMasterEntitySupport(), uploadDropAreaLayout);
-    }
+	private List<MasterEntityAwareComponent<ProxySoftwareModule>> getMasterEntityAwareComponents() {
+		return Arrays.asList(artifactDetailsHeader, artifactDetailsGrid.getMasterEntitySupport(), uploadDropAreaLayout);
+	}
 
-    /**
-     * Checks progress on file upload
-     *
-     * @param fileUploadProgress
-     *            FileUploadProgress
-     */
-    public void onUploadChanged(final FileUploadProgress fileUploadProgress) {
-        if (uploadDropAreaLayout != null) {
-            uploadDropAreaLayout.onUploadChanged(fileUploadProgress);
-        }
-    }
+	/**
+	 * Checks progress on file upload
+	 *
+	 * @param fileUploadProgress FileUploadProgress
+	 */
+	public void onUploadChanged(final FileUploadProgress fileUploadProgress) {
+		if (uploadDropAreaLayout != null) {
+			uploadDropAreaLayout.onUploadChanged(fileUploadProgress);
+		}
+	}
 
-    /**
-     * Maximize the artifact grid
-     */
-    public void maximize() {
-        artifactDetailsGrid.createMaximizedContent();
-        hideDetailsLayout();
-    }
+	/**
+	 * Maximize the artifact grid
+	 */
+	public void maximize() {
+		artifactDetailsGrid.createMaximizedContent();
+		hideDetailsLayout();
+	}
 
-    /**
-     * Minimize the artifact grid
-     */
-    public void minimize() {
-        artifactDetailsGrid.createMinimizedContent();
-        showDetailsLayout();
-    }
+	/**
+	 * Minimize the artifact grid
+	 */
+	public void minimize() {
+		artifactDetailsGrid.createMinimizedContent();
+		showDetailsLayout();
+	}
 
-    @Override
-    public void restoreState() {
-        artifactDetailsHeader.restoreState();
+	@Override
+	public void restoreState() {
+		artifactDetailsHeader.restoreState();
 
-        if (uploadDropAreaLayout != null) {
-            uploadDropAreaLayout.restoreState();
-        }
-    }
+		if (uploadDropAreaLayout != null) {
+			uploadDropAreaLayout.restoreState();
+		}
+	}
 
-    @Override
-    public void subscribeListeners() {
-        selectionChangedListener.subscribe();
-        fileUploadChangedListener.subscribe();
-    }
+	@Override
+	public void subscribeListeners() {
+		selectionChangedListener.subscribe();
+		fileUploadChangedListener.subscribe();
+	}
 
-    @Override
-    public void unsubscribeListeners() {
-        selectionChangedListener.unsubscribe();
-        fileUploadChangedListener.unsubscribe();
-    }
+	@Override
+	public void unsubscribeListeners() {
+		selectionChangedListener.unsubscribe();
+		fileUploadChangedListener.unsubscribe();
+	}
 }

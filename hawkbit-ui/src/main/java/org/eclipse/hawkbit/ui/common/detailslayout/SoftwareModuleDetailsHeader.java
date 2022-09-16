@@ -1,4 +1,5 @@
 /**
+ * Copyright (c) 2022 Rojar Smith.
  * Copyright (c) 2020 Bosch.IO GmbH and others.
  *
  * All rights reserved. This program and the accompanying materials
@@ -9,6 +10,8 @@
 package org.eclipse.hawkbit.ui.common.detailslayout;
 
 import org.eclipse.hawkbit.repository.ArtifactManagement;
+import org.eclipse.hawkbit.repository.TenantConfigurationManagement;
+import org.eclipse.hawkbit.security.SystemSecurityContext;
 import org.eclipse.hawkbit.ui.artifacts.details.ArtifactDetailsGrid;
 import org.eclipse.hawkbit.ui.artifacts.smtable.SmMetaDataWindowBuilder;
 import org.eclipse.hawkbit.ui.artifacts.smtable.SmWindowBuilder;
@@ -27,170 +30,177 @@ import com.vaadin.ui.Window;
  * Software module details header
  */
 public class SoftwareModuleDetailsHeader extends AbstractDetailsHeader<ProxySoftwareModule> {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private final transient SmWindowBuilder smWindowBuilder;
-    private final transient SmMetaDataWindowBuilder smMetaDataWindowBuilder;
-    private final transient CommonUiDependencies uiDependencies;
+	private final transient SmWindowBuilder smWindowBuilder;
+	private final transient SmMetaDataWindowBuilder smMetaDataWindowBuilder;
+	private final transient CommonUiDependencies uiDependencies;
+	private final transient TenantConfigurationManagement tenantConfigManagement;
+	private final transient SystemSecurityContext systemSecurityContext;
 
-    private transient ArtifactDetailsHeaderSupport artifactDetailsHeaderSupport;
-    private transient ArtifactManagement artifactManagement;
-    private ArtifactDetailsGrid artifactDetailsGrid;
+	private transient ArtifactDetailsHeaderSupport artifactDetailsHeaderSupport;
+	private transient ArtifactManagement artifactManagement;
+	private ArtifactDetailsGrid artifactDetailsGrid;
 
-    /**
-     * Constructor for SoftwareModuleDetailsHeader
-     *
-     * @param uiDependencies
-     *            {@link CommonUiDependencies}
-     * @param smWindowBuilder
-     *            SmWindowBuilder
-     * @param smMetaDataWindowBuilder
-     *            SmMetaDataWindowBuilder
-     */
-    public SoftwareModuleDetailsHeader(final CommonUiDependencies uiDependencies, final SmWindowBuilder smWindowBuilder,
-            final SmMetaDataWindowBuilder smMetaDataWindowBuilder) {
-        super(uiDependencies.getI18n(), uiDependencies.getPermChecker(), uiDependencies.getEventBus(), uiDependencies.getUiNotification());
-        this.uiDependencies = uiDependencies;
+	/**
+	 * Constructor for SoftwareModuleDetailsHeader
+	 *
+	 * @param uiDependencies          {@link CommonUiDependencies}
+	 * @param smWindowBuilder         SmWindowBuilder
+	 * @param smMetaDataWindowBuilder SmMetaDataWindowBuilder
+	 * @param tenantConfigManagement  TenantConfigManagement
+	 * @param systemSecurityContext   SystemSecurityContext
+	 */
+	public SoftwareModuleDetailsHeader(final CommonUiDependencies uiDependencies, final SmWindowBuilder smWindowBuilder,
+			final SmMetaDataWindowBuilder smMetaDataWindowBuilder,
+			final TenantConfigurationManagement tenantConfigManagement,
+			final SystemSecurityContext systemSecurityContext) {
+		super(uiDependencies.getI18n(), uiDependencies.getPermChecker(), uiDependencies.getEventBus(),
+				uiDependencies.getUiNotification());
+		this.uiDependencies = uiDependencies;
 
-        this.smWindowBuilder = smWindowBuilder;
-        this.smMetaDataWindowBuilder = smMetaDataWindowBuilder;
-    }
+		this.smWindowBuilder = smWindowBuilder;
+		this.smMetaDataWindowBuilder = smMetaDataWindowBuilder;
 
-    @Override
-    protected String getMasterEntityType() {
-        return i18n.getMessage("upload.swModuleTable.header");
-    }
+		this.tenantConfigManagement = tenantConfigManagement;
+		this.systemSecurityContext = systemSecurityContext;
+	}
 
-    @Override
-    protected String getMasterEntityDetailsCaptionId() {
-        return UIComponentIdProvider.SOFTWARE_MODULE_DETAILS_HEADER_LABEL_ID;
-    }
+	@Override
+	protected String getMasterEntityType() {
+		return i18n.getMessage("upload.swModuleTable.header");
+	}
 
-    @Override
-    protected String getMasterEntityName(final ProxySoftwareModule masterEntity) {
-        return masterEntity.getNameAndVersion();
-    }
+	@Override
+	protected String getMasterEntityDetailsCaptionId() {
+		return UIComponentIdProvider.SOFTWARE_MODULE_DETAILS_HEADER_LABEL_ID;
+	}
 
-    @Override
-    public void masterEntityChanged(final ProxySoftwareModule entity) {
-        super.masterEntityChanged(entity);
+	@Override
+	protected String getMasterEntityName(final ProxySoftwareModule masterEntity) {
+		return masterEntity.getNameAndVersion();
+	}
 
-        if (artifactDetailsHeaderSupport != null) {
-            if (entity == null) {
-                artifactDetailsHeaderSupport.disableArtifactDetailsIcon();
-            } else {
-                artifactDetailsHeaderSupport.enableArtifactDetailsIcon();
-                if (artifactDetailsGrid != null) {
-                    artifactDetailsGrid.refreshAll();
-                }
-            }
-        }
-    }
+	@Override
+	public void masterEntityChanged(final ProxySoftwareModule entity) {
+		super.masterEntityChanged(entity);
 
-    @Override
-    protected String getEditIconId() {
-        return UIComponentIdProvider.UPLOAD_SW_MODULE_EDIT_BUTTON;
-    }
+		if (artifactDetailsHeaderSupport != null) {
+			if (entity == null) {
+				artifactDetailsHeaderSupport.disableArtifactDetailsIcon();
+			} else {
+				artifactDetailsHeaderSupport.enableArtifactDetailsIcon();
+				if (artifactDetailsGrid != null) {
+					artifactDetailsGrid.refreshAll();
+				}
+			}
+		}
+	}
 
-    @Override
-    protected void onEdit() {
-        if (selectedEntity == null) {
-            return;
-        }
+	@Override
+	protected String getEditIconId() {
+		return UIComponentIdProvider.UPLOAD_SW_MODULE_EDIT_BUTTON;
+	}
 
-        final Window updateWindow = smWindowBuilder.getWindowForUpdate(selectedEntity);
+	@Override
+	protected void onEdit() {
+		if (selectedEntity == null) {
+			return;
+		}
 
-        updateWindow.setCaption(i18n.getMessage("caption.update", i18n.getMessage("caption.software.module")));
-        UI.getCurrent().addWindow(updateWindow);
-        updateWindow.setVisible(Boolean.TRUE);
-    }
+		final Window updateWindow = smWindowBuilder.getWindowForUpdate(selectedEntity);
 
-    @Override
-    protected String getMetaDataIconId() {
-        return UIComponentIdProvider.UPLOAD_SW_MODULE_METADATA_BUTTON;
-    }
+		updateWindow.setCaption(i18n.getMessage("caption.update", i18n.getMessage("caption.software.module")));
+		UI.getCurrent().addWindow(updateWindow);
+		updateWindow.setVisible(Boolean.TRUE);
+	}
 
-    @Override
-    protected void showMetaData() {
-        if (selectedEntity == null) {
-            return;
-        }
+	@Override
+	protected String getMetaDataIconId() {
+		return UIComponentIdProvider.UPLOAD_SW_MODULE_METADATA_BUTTON;
+	}
 
-        final Window metaDataWindow = smMetaDataWindowBuilder.getWindowForShowSmMetaData(selectedEntity.getId(),
-                selectedEntity.getNameAndVersion());
+	@Override
+	protected void showMetaData() {
+		if (selectedEntity == null) {
+			return;
+		}
 
-        UI.getCurrent().addWindow(metaDataWindow);
-        metaDataWindow.setVisible(Boolean.TRUE);
-    }
+		final Window metaDataWindow = smMetaDataWindowBuilder.getWindowForShowSmMetaData(selectedEntity.getId(),
+				selectedEntity.getNameAndVersion());
 
-    /**
-     * Add artifact details header support
-     *
-     * @param artifactManagement
-     *            ArtifactManagement
-     */
-    public void addArtifactDetailsHeaderSupport(final ArtifactManagement artifactManagement) {
-        if (artifactDetailsHeaderSupport == null) {
-            this.artifactManagement = artifactManagement;
+		UI.getCurrent().addWindow(metaDataWindow);
+		metaDataWindow.setVisible(Boolean.TRUE);
+	}
 
-            artifactDetailsHeaderSupport = new ArtifactDetailsHeaderSupport(i18n,
-                    UIComponentIdProvider.SW_MODULE_ARTIFACT_DETAILS_BUTTON, this::showArtifactDetailsWindow);
-            addHeaderSupport(artifactDetailsHeaderSupport);
-        }
-    }
+	/**
+	 * Add artifact details header support
+	 *
+	 * @param artifactManagement ArtifactManagement
+	 */
+	public void addArtifactDetailsHeaderSupport(final ArtifactManagement artifactManagement) {
+		if (artifactDetailsHeaderSupport == null) {
+			this.artifactManagement = artifactManagement;
 
-    /**
-     * Show artifact detail window layout
-     */
-    private void showArtifactDetailsWindow() {
-        if (selectedEntity == null) {
-            return;
-        }
+			artifactDetailsHeaderSupport = new ArtifactDetailsHeaderSupport(i18n,
+					UIComponentIdProvider.SW_MODULE_ARTIFACT_DETAILS_BUTTON, this::showArtifactDetailsWindow);
+			addHeaderSupport(artifactDetailsHeaderSupport);
+		}
+	}
 
-        if (artifactDetailsGrid == null) {
-            artifactDetailsGrid = new ArtifactDetailsGrid(uiDependencies, artifactManagement);
-        }
-        setInitialArtifactDetailsGridSize(artifactDetailsGrid);
-        artifactDetailsGrid.getMasterEntitySupport().masterEntityChanged(selectedEntity);
+	/**
+	 * Show artifact detail window layout
+	 */
+	private void showArtifactDetailsWindow() {
+		if (selectedEntity == null) {
+			return;
+		}
 
-        final Window artifactDtlsWindow = new Window();
-        artifactDtlsWindow.setId(UIComponentIdProvider.SHOW_ARTIFACT_DETAILS_POPUP_ID);
+		if (artifactDetailsGrid == null) {
+			artifactDetailsGrid = new ArtifactDetailsGrid(uiDependencies, artifactManagement, tenantConfigManagement,
+					systemSecurityContext);
+		}
+		setInitialArtifactDetailsGridSize(artifactDetailsGrid);
+		artifactDetailsGrid.getMasterEntitySupport().masterEntityChanged(selectedEntity);
 
-        artifactDtlsWindow.setClosable(true);
-        artifactDtlsWindow.setResizable(true);
-        artifactDtlsWindow.setWindowMode(WindowMode.NORMAL);
-        artifactDtlsWindow.setModal(true);
-        artifactDtlsWindow.addStyleName(SPUIStyleDefinitions.CONFIRMATION_WINDOW_CAPTION);
+		final Window artifactDtlsWindow = new Window();
+		artifactDtlsWindow.setId(UIComponentIdProvider.SHOW_ARTIFACT_DETAILS_POPUP_ID);
 
-        artifactDtlsWindow
-                .setAssistivePrefix(i18n.getMessage(UIMessageIdProvider.CAPTION_ARTIFACT_DETAILS_OF) + " " + "<b>");
-        artifactDtlsWindow.setCaptionAsHtml(false);
-        artifactDtlsWindow.setCaption(selectedEntity.getNameAndVersion());
-        artifactDtlsWindow.setAssistivePostfix("</b>");
+		artifactDtlsWindow.setClosable(true);
+		artifactDtlsWindow.setResizable(true);
+		artifactDtlsWindow.setWindowMode(WindowMode.NORMAL);
+		artifactDtlsWindow.setModal(true);
+		artifactDtlsWindow.addStyleName(SPUIStyleDefinitions.CONFIRMATION_WINDOW_CAPTION);
 
-        artifactDtlsWindow.addWindowModeChangeListener(event -> {
-            if (event.getWindowMode() == WindowMode.MAXIMIZED) {
-                artifactDtlsWindow.setSizeFull();
-                artifactDetailsGrid.setSizeFull();
+		artifactDtlsWindow
+				.setAssistivePrefix(i18n.getMessage(UIMessageIdProvider.CAPTION_ARTIFACT_DETAILS_OF) + " " + "<b>");
+		artifactDtlsWindow.setCaptionAsHtml(false);
+		artifactDtlsWindow.setCaption(selectedEntity.getNameAndVersion());
+		artifactDtlsWindow.setAssistivePostfix("</b>");
 
-                artifactDetailsGrid.createMaximizedContent();
-            } else {
-                artifactDtlsWindow.setSizeUndefined();
-                setInitialArtifactDetailsGridSize(artifactDetailsGrid);
+		artifactDtlsWindow.addWindowModeChangeListener(event -> {
+			if (event.getWindowMode() == WindowMode.MAXIMIZED) {
+				artifactDtlsWindow.setSizeFull();
+				artifactDetailsGrid.setSizeFull();
 
-                artifactDetailsGrid.createMinimizedContent();
-            }
-        });
+				artifactDetailsGrid.createMaximizedContent();
+			} else {
+				artifactDtlsWindow.setSizeUndefined();
+				setInitialArtifactDetailsGridSize(artifactDetailsGrid);
 
-        artifactDtlsWindow.addCloseListener(event -> artifactDetailsGrid = null);
+				artifactDetailsGrid.createMinimizedContent();
+			}
+		});
 
-        artifactDtlsWindow.setContent(artifactDetailsGrid);
+		artifactDtlsWindow.addCloseListener(event -> artifactDetailsGrid = null);
 
-        UI.getCurrent().addWindow(artifactDtlsWindow);
-    }
+		artifactDtlsWindow.setContent(artifactDetailsGrid);
 
-    private static void setInitialArtifactDetailsGridSize(final ArtifactDetailsGrid artifactDetailsGrid) {
-        artifactDetailsGrid.setWidth(700, Unit.PIXELS);
-        artifactDetailsGrid.setHeight(500, Unit.PIXELS);
-    }
+		UI.getCurrent().addWindow(artifactDtlsWindow);
+	}
+
+	private static void setInitialArtifactDetailsGridSize(final ArtifactDetailsGrid artifactDetailsGrid) {
+		artifactDetailsGrid.setWidth(700, Unit.PIXELS);
+		artifactDetailsGrid.setHeight(500, Unit.PIXELS);
+	}
 }

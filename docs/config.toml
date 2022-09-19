@@ -86,11 +86,6 @@ canonifyurls = false
 	url    = "/apis/"
 	weight = 80
 
-[[menu.main]]
-	name   = "Community"
-	url    = "/community/"
-	weight = 90
-
 [blackfriday]
 	smartypants	= true
 	fractions = false

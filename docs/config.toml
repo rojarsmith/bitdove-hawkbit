@@ -23,7 +23,7 @@ canonifyurls = false
 	author = "The Bitdove Project"
 	description = "IoT. Update. Device."
 	copyright = "The Bitdove Project"
-	logo = "images/bitdove_logo.png"
+	logo = "images/bitdove_logo_256x256.png"
 	favicon = "images/favicon.ico"
 
 	permalink = "#"

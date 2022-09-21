@@ -57,7 +57,7 @@ weight: 40
 - TLS encryption.
 
 ### Device Management Federation API
-- Indirect device integration through a device management service or application into hawkBit.
+- Indirect device integration through a device management service or application.
 - Optimized for high service to service throughput with [AMQP](https://www.rabbitmq.com/amqp-0-9-1-reference.html) messaging interface.
 - Separate AMQP vHost per tenant for maximum security.
 

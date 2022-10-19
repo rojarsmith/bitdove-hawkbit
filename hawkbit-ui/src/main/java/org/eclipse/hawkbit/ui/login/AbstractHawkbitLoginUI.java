@@ -1,4 +1,5 @@
 /**
+ * Copyright (c) 2022 Rojar Smith.
  * Copyright (c) 2015 Bosch Software Innovations GmbH and others.
  *
  * All rights reserved. This program and the accompanying materials
@@ -18,7 +19,7 @@ import org.eclipse.hawkbit.ui.UiProperties;
 import org.eclipse.hawkbit.ui.common.data.proxies.ProxyLoginCredentials;
 import org.eclipse.hawkbit.ui.common.notification.ParallelNotification;
 import org.eclipse.hawkbit.ui.components.SPUIComponentProvider;
-import org.eclipse.hawkbit.ui.themes.HawkbitTheme;
+import org.eclipse.hawkbit.ui.themes.BitdoveTheme;
 import org.eclipse.hawkbit.ui.utils.HawkbitCommonUtil;
 import org.eclipse.hawkbit.ui.utils.SPUIStyleDefinitions;
 import org.eclipse.hawkbit.ui.utils.UIComponentIdProvider;
@@ -68,8 +69,8 @@ import com.vaadin.ui.themes.ValoTheme;
  *
  */
 @Title("hawkBit UI - Login")
-@Widgetset(value = HawkbitTheme.WIDGET_SET_NAME)
-@Theme(HawkbitTheme.THEME_NAME)
+@Widgetset(value = BitdoveTheme.WIDGET_SET_NAME)
+@Theme(BitdoveTheme.THEME_NAME)
 public abstract class AbstractHawkbitLoginUI extends UI {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractHawkbitLoginUI.class);
 

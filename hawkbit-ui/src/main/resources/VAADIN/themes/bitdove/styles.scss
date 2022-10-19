@@ -7,12 +7,12 @@
  * http://www.eclipse.org/legal/epl-v10.html
  */
 @import "customstyles/bitdovevariables";
-@import "../hawkbit/hawkbittheme";
-@import "../hawkbit/addons";
+@import "../bitdove/bitdovetheme";
+@import "../bitdove/addons";
 
 /* This file prefixes all rules with the theme name to avoid causing conflicts with other themes. */
 /* The actual styles should be defined in testvalothemedemo.scss */
 .bitdove {
   @include addons;
-  @include hawkbittheme;
+  @include bitdovetheme;
 }

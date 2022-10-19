@@ -74,7 +74,7 @@
     //Table row icon color when on hover of row
     tr.v-selected:hover {
       .tablePin .v-icon {
-        color: $hawkbit-primary-color !important;
+        color: $bitdove-primary-color !important;
       }
 
       .pin-icon {
@@ -89,7 +89,7 @@
 
       div.pin-icon:hover {
         background-color: $widget-bg !important;
-        color: $hawkbit-primary-color !important;
+        color: $bitdove-primary-color !important;
       }
     }
 

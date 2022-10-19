@@ -41,8 +41,8 @@
    	}
   	
   	.v-context-menu .v-context-menu-item-basic:focus, .v-context-menu .v-context-menu-item-basic-submenu:focus, .v-context-menu .v-context-menu-item-basic-open {
-  	 	@include valo-gradient($color: $hawkbit-primary-color);
-		background-color: $hawkbit-primary-color !important;
+  	 	@include valo-gradient($color: $bitdove-primary-color);
+		background-color: $bitdove-primary-color !important;
 		color: #e8eef3;
 		height: 30px;
 		text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
@@ -114,7 +114,7 @@
         text {
           font-size: 12px;
           font-weight: bold;
-          fill: $hawkbit-primary-color;
+          fill: $bitdove-primary-color;
         }
       }
 

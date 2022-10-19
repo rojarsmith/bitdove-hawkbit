@@ -76,7 +76,7 @@
   //Pin style - when pinned and when row is not selected
   tr:not(.v-selected) .v-button-targetPinned:after {
     content: '\f08d';
-    color: $hawkbit-primary-color;
+    color: $bitdove-primary-color;
   }
 
   //Pin style - when pinned and when row is selected
@@ -87,14 +87,14 @@
 
   //Pin style - when hovered on pin and when row is not selected
   tr:not(.v-selected) .v-button-targetStatusPinToggle:hover:after {
-    background-color: $hawkbit-primary-color;
+    background-color: $bitdove-primary-color;
     color: $widget-bg !important;
   }
 
   //Pin style - when hovered on pin and when row is selected
   widget-bg .v-button-targetStatusPinToggle:hover:after {
     background-color: $widget-bg;
-    color: $hawkbit-primary-color !important;
+    color: $bitdove-primary-color !important;
   }
 
   //Toggle between pin and status icon
@@ -124,7 +124,7 @@
 
   // pending status label not selected
   tr:not(.v-selected) .statusIconForced:after {
-    color: $hawkbit-primary-color;
+    color: $bitdove-primary-color;
   }
 
   // pending status label selected
@@ -134,7 +134,7 @@
 
   // pending status label not selected
   tr:not(.v-selected) .statusIconPending:after {
-    color: $hawkbit-primary-color;
+    color: $bitdove-primary-color;
   }
 
   // pending status label selected
@@ -145,7 +145,7 @@
   // active status label not selected
   tr:not(.v-grid-row-selected) .statusIconActive {
     @include valo-spinner($size:16px, $speed:1200ms);
-    color: $hawkbit-primary-color;
+    color: $bitdove-primary-color;
   }
 
   // active status label selected
@@ -156,7 +156,7 @@
 
   // neutral status label not selected
   tr:not(.v-selected) .statusIconNeutral:after {
-    color: $hawkbit-primary-color;
+    color: $bitdove-primary-color;
   }
 
   // neutral status label selected
@@ -166,7 +166,7 @@
 
   // red status label not selected
   tr:not(.v-selected) .borderless.statusIconRed:after {
-    color: $hawkbit-primary-color;
+    color: $bitdove-primary-color;
     content: '';
   }
 
@@ -237,8 +237,8 @@
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     border: 2px solid rgba(0, 0, 0, 0);
-    border-top-color: $hawkbit-primary-color;
-    border-right-color: $hawkbit-primary-color;
+    border-top-color: $bitdove-primary-color;
+    border-right-color: $bitdove-primary-color;
     border-radius: 100%;
     -webkit-animation: v-rotate-360 500ms infinite linear;
     -moz-animation: v-rotate-360 500ms infinite linear;

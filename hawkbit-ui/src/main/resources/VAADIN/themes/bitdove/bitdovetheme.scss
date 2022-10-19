@@ -75,7 +75,7 @@ $v-included-components: remove($v-included-components, tree);
 $v-included-components: remove($v-included-components, twincolselect);
 $v-included-components: remove($v-included-components, form);
 
-@mixin hawkbittheme {
+@mixin bitdovetheme {
   // Include all the styles from the valo theme
   @include valo;
   @include generic-styles;
@@ -119,8 +119,8 @@ $v-included-components: remove($v-included-components, form);
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     border: 2px solid rgba(0, 0, 0, 0);
-    border-top-color: $hawkbit-primary-color;
-    border-right-color: $hawkbit-primary-color;
+    border-top-color: $bitdove-primary-color;
+    border-right-color: $bitdove-primary-color;
     border-radius: 100%;
     -webkit-animation: v-rotate-360 500ms infinite linear;
     -moz-animation: v-rotate-360 500ms infinite linear;

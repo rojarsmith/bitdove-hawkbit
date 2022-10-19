@@ -16,19 +16,19 @@
    
   .show-drop-hint {
     .v-grid-tablewrapper {
-      border: 1px dashed $hawkbit-primary-color !important;
+      border: 1px dashed $bitdove-primary-color !important;
     }
   }
   .filter-drop-hint-layout.show-drop-hint {
-    border: 1px dashed $hawkbit-primary-color !important;
+    border: 1px dashed $bitdove-primary-color !important;
   }
 
   .filter-drop-hint-layout.show-drop-hint.v-button-dragtarget{
-    background-color: desaturate(lighten($hawkbit-primary-color, 50%), 20%);
+    background-color: desaturate(lighten($bitdove-primary-color, 50%), 20%);
   }
 
   .filter-drop-hint-layout.show-drop-hint.v-horizontallayout-drag-center{
-    background-color: desaturate(lighten($hawkbit-primary-color, 50%), 20%);
+    background-color: desaturate(lighten($bitdove-primary-color, 50%), 20%);
   }
 
   .v-grid-row-drag-center::after,.v-grid-body-drag-top::after {
@@ -37,7 +37,7 @@
 
   .show-drop-hint .v-grid-row-drag-center .v-grid-cell {
     background-image: none;
-    background-color: desaturate(lighten($hawkbit-primary-color, 50%), 20%);
+    background-color: desaturate(lighten($bitdove-primary-color, 50%), 20%);
     color: dimgray;
   }
 

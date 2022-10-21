@@ -60,6 +60,7 @@ maven.properties
 
 # Test Files
 *.tmp
+/log-install.txt
 
 # Documentation
 docs/themes/**

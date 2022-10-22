@@ -67,8 +67,6 @@
                         <copy todir="${project.build.directory}/classes/VAADIN/widgetsets">
                            <fileset dir="${basedir}/src/main/resources/VAADIN/widgetsets" includes="**/*" />
                         </copy>
-                        <copy file="${basedir}/src/main/resources/VAADIN/themes/hawkbit/styles.css" 
-                           tofile="${project.build.directory}/classes/VAADIN/themes/hawkbit/styles.css" />
                         <copy file="${basedir}/src/main/resources/VAADIN/themes/bitdove/styles.css" 
                            tofile="${project.build.directory}/classes/VAADIN/themes/bitdove/styles.css" />
                      </target>

@@ -4,16 +4,6 @@
 // scss-lint:disable ImportantRule, PropertySortOrder
 
 @mixin login {
-  .v-button {
-    color: white;
-    background: #FA541C;
-    box-shadow: inset 0 1px 0 #BF4015, inset 0 -1px 0 #BF4015;
-  }
- 
-  .v-link a:hover {
-  	color: $bitdove-primary-color-light;
-  }
-
   .login-button {
     border-color: $white-hex-color;
     height: 38px;

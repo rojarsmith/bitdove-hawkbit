@@ -1,10 +1,5 @@
 /**
- * Copyright (c) 2015 Bosch Software Innovations GmbH and others.
- *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * Copyright (c) 2022 Rojar Smith.
  */
 // scss-lint:disable ImportantRule, PropertySortOrder
 
@@ -13,6 +8,10 @@
     color: white;
     background: #FA541C;
     box-shadow: inset 0 1px 0 #BF4015, inset 0 -1px 0 #BF4015;
+  }
+ 
+  .v-link a:hover {
+  	color: $bitdove-primary-color-light;
   }
 
   .login-button {

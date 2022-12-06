@@ -1,4 +1,5 @@
 /**
+ * Copyright (c) 2022 Rojar Smith.
  * Copyright (c) 2015 Bosch Software Innovations GmbH and others.
  *
  * All rights reserved. This program and the accompanying materials
@@ -11,7 +12,7 @@ package org.eclipse.hawkbit.app;
 import org.eclipse.hawkbit.im.authentication.MultitenancyIndicator;
 import org.eclipse.hawkbit.ui.UiProperties;
 import org.eclipse.hawkbit.ui.login.AbstractHawkbitLoginUI;
-import org.eclipse.hawkbit.ui.themes.HawkbitTheme;
+import org.eclipse.hawkbit.ui.themes.BitdoveTheme;
 import org.eclipse.hawkbit.ui.utils.VaadinMessageSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -25,9 +26,9 @@ import com.vaadin.spring.annotation.SpringUI;
  * A {@link SpringUI} annotated class must be present in the classpath for the
  * login path. The easiest way to get an hawkBit login UI running is to extend
  * the {@link AbstractHawkbitLoginUI} and to annotated it with {@link SpringUI}
- * as in this example to the defined {@link HawkbitTheme#LOGIN_UI_PATH}.
+ * as in this example to the defined {@link BitdoveTheme#LOGIN_UI_PATH}.
  */
-@SpringUI(path = HawkbitTheme.LOGIN_UI_PATH)
+@SpringUI(path = BitdoveTheme.LOGIN_UI_PATH)
 // Exception squid:MaximumInheritanceDepth - Most of the inheritance comes from
 // Vaadin.
 @SuppressWarnings({ "squid:MaximumInheritanceDepth" })

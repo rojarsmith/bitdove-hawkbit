@@ -1,4 +1,5 @@
 /**
+ * Copyright (c) 2022 Rojar Smith.
  * Copyright (c) 2015 Bosch Software Innovations GmbH and others.
  *
  * All rights reserved. This program and the accompanying materials
@@ -15,7 +16,7 @@ import org.eclipse.hawkbit.ui.menu.DashboardMenu;
 import org.eclipse.hawkbit.ui.menu.DashboardMenuItem;
 import org.eclipse.hawkbit.ui.push.EventPushStrategy;
 import org.eclipse.hawkbit.ui.push.UIEventProvider;
-import org.eclipse.hawkbit.ui.themes.HawkbitTheme;
+import org.eclipse.hawkbit.ui.themes.BitdoveTheme;
 import org.eclipse.hawkbit.ui.utils.HawkbitCommonUtil;
 import org.eclipse.hawkbit.ui.utils.SPDateTimeUtil;
 import org.eclipse.hawkbit.ui.utils.VaadinMessageSource;
@@ -53,8 +54,8 @@ import com.vaadin.ui.themes.ValoTheme;
  *
  */
 @Title("hawkBit Update Server")
-@Widgetset(value = HawkbitTheme.WIDGET_SET_NAME)
-@Theme(HawkbitTheme.THEME_NAME)
+@Widgetset(value = BitdoveTheme.WIDGET_SET_NAME)
+@Theme(BitdoveTheme.THEME_NAME)
 public abstract class AbstractHawkbitUI extends UI implements DetachListener {
     private static final long serialVersionUID = 1L;
 

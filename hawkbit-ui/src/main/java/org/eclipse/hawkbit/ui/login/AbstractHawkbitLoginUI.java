@@ -166,6 +166,13 @@ public abstract class AbstractHawkbitLoginUI extends UI {
         loginPanel.addStyleName("login-panel");
         Responsive.makeResponsive(loginPanel);
 
+        if(isDemo) {
+            Label namepassword = new Label(String.format("<font size='3' color='black'>Name: </font><font size='3' color='blue'>demo</font><font size='3' color='black'> Password: </font><font size='3' color='blue'>12341234</font>"), ContentMode.HTML);
+            loginPanel.addComponent(namepassword);
+            Label tip = new Label(String.format("<font size='3' color='black'>Such account and password apply to test the API</font>"), ContentMode.HTML);
+            loginPanel.addComponent(tip);
+        }
+
         loginPanel.addComponent(buildFields());
         if (isDemo) {
             loginPanel.addComponent(buildDisclaimer());

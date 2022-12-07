@@ -1,4 +1,5 @@
 #
+# Copyright (c) 2022 Rojar Smith.
 # Copyright (c) 2018 Bosch Software Innovations GmbH and others.
 #
 # All rights reserved. This program and the accompanying materials
@@ -7,9 +8,9 @@
 # http://www.eclipse.org/legal/epl-v10.html
 #
 
-baseurl = "https://www.eclipse.org/hawkbit/"
+baseurl = "https://www.bitdove.net/doc/bitdove"
 languageCode = "en-us"
-title = "Eclipse hawkBit"
+title = "Bitdove"
 theme = "hugo-material-docs"
 metadataformat = "toml"
 canonifyurls = false
@@ -22,20 +23,16 @@ canonifyurls = false
 
 [params]
 	# General information
-	author = "The Eclipse hawkBit Project"
+	author = "The Bitdove Project"
 	description = "IoT. Update. Device."
-	copyright = "The Eclipse hawkBit Project"
-	logo = "images/hawkbit_icon.png"
+	copyright = "The Bitdove Project"
+	logo = "images/bitdove_logo_256x256.png"
 	favicon = "images/favicon.ico"
-
-	# Repository
-	provider = "GitHub"
-	repo_url = "https://github.com/eclipse/hawkbit"
 
 	permalink = "#"
 
 	# Custom assets
-	custom_css = ["css/hawkbit.css","//www.eclipse.org/eclipse.org-common/themes/solstice/public/stylesheets/vendor/cookieconsent/cookieconsent.min.css"]
+	custom_css = ["css/bitdove.css"]
 	custom_js  = []
 
 	# Syntax highlighting theme
@@ -50,13 +47,11 @@ canonifyurls = false
 	code = "Ubuntu Mono"
 
 [social]
-	github  = "eclipse/hawkbit"
-	gitter  = "eclipse/hawkbit"
-	docker  = "hawkbit"
+	bitdove = "bitdove"
 
 [[menu.main]]
-	name   = "What is hawkBit"
-	url    = "/whatishawkbit/"
+	name   = "What is bitdove"
+	url    = "/whatisbitdove/"
 	weight = 10
 
 [[menu.main]]
@@ -80,11 +75,6 @@ canonifyurls = false
 	weight = 50
 
 [[menu.main]]
-	name   = "Architecture"
-	url    = "/architecture/"
-	weight = 60
-
-[[menu.main]]
 	name   = "Management UI"
 	url    = "/ui/"
 	weight = 70
@@ -93,16 +83,6 @@ canonifyurls = false
 	name   = "APIs"
 	url    = "/apis/"
 	weight = 80
-
-[[menu.main]]
-	name   = "Community"
-	url    = "/community/"
-	weight = 90
-
-[[menu.main]]
-	name   = "Release notes"
-	url    = "/release-notes/"
-	weight = 100
 
 [blackfriday]
 	smartypants	= true

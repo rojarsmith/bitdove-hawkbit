@@ -4,7 +4,7 @@ parent: APIs
 weight: 82
 ---
 
-The hawkBit [update server](https://github.com/eclipse/hawkbit) provides REST resources which are consumed by the device to retrieve software update tasks.
+The Bitdove provides REST resources which are consumed by the device to retrieve software update tasks.
 This API is based on HTTP standards and a polling mechanism.
 <!--more-->
 
@@ -14,9 +14,9 @@ In DDI the target is identified using a  **controllerId**. Controller is used as
 
 ## State Machine Mapping
 
-For historical reasons the DDI has a different state machine and status messages than the [Target State Machine](../../concepts/targetstate/) of the hawkBit update server.
+For historical reasons the DDI has a different state machine and status messages than the [Target State Machine](../../concepts/targetstate/) of the Bitdove update server.
 
-This is kept in order to ensure that _DDI_ stays compatible for devices out there in the field. A future version "2" of _DDI_ might change that. _DDI_ also defines more states than the update server, e.g. multiple DDI states are currently mapped by the _DDI_ implementation to _RUNNING_ state. It is possible that in the future hawkBit will fully leverage these additional states.
+This is kept in order to ensure that _DDI_ stays compatible for devices out there in the field. A future version "2" of _DDI_ might change that. _DDI_ also defines more states than the update server, e.g. multiple DDI states are currently mapped by the _DDI_ implementation to _RUNNING_ state. It is possible that in the future Bitdove will fully leverage these additional states.
 
 The _DDI_ API allows the device to provide the following feedback messages:
 

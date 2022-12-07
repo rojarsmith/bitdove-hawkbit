@@ -13,7 +13,7 @@ The API is protected and needs authentication and authorization based on the sec
 
 ## API Version
 
-hawkBit provides an consistent Management API interface that guarantees backwards compatibility for future releases by version control.
+Bitdove provides an consistent Management API interface that guarantees backwards compatibility for future releases by version control.
 
 The current version of the Management API is `version 1 (v1)` with the URI http://localhost:8080/rest/v1/
 
@@ -28,17 +28,17 @@ Supported HTTP-methods are:
 
 Available Management APIs resources are:
 
-- [Targets](/hawkbit/apis/mgmt/targets/)
-- [Target types](/hawkbit/apis/mgmt/targettypes/)
-- [Distribution sets](/hawkbit/apis/mgmt/distributionsets/)
-- [Distribution set types](/hawkbit/apis/mgmt/distributionsettypes/)
-- [Software modules](/hawkbit/apis/mgmt/softwaremodules/)
-- [Software module types](/hawkbit/apis/mgmt/softwaremoduletypes/)
-- [Target tag](/hawkbit/apis/mgmt/targettag/)
-- [Distribution set tag](/hawkbit/apis/mgmt/distributionsettag/)
-- [Rollouts](/hawkbit/apis/mgmt/rollouts/)
-- [Target filters](/hawkbit/apis/mgmt/targetfilters/)
-- [System configuration](/hawkbit/apis/mgmt/tenant/)
+- [Targets](/doc/bitdove/apis/mgmt/targets/)
+- [Target types](/doc/bitdove/apis/mgmt/targettypes/)
+- [Distribution sets](/doc/bitdove/apis/mgmt/distributionsets/)
+- [Distribution set types](/doc/bitdove/apis/mgmt/distributionsettypes/)
+- [Software modules](/doc/bitdove/apis/mgmt/softwaremodules/)
+- [Software module types](/doc/bitdove/apis/mgmt/softwaremoduletypes/)
+- [Target tag](/doc/bitdove/apis/mgmt/targettag/)
+- [Distribution set tag](/doc/bitdove/apis/mgmt/distributionsettag/)
+- [Rollouts](/doc/bitdove/apis/mgmt/rollouts/)
+- [Target filters](/doc/bitdove/apis/mgmt/targetfilters/)
+- [System configuration](/doc/bitdove/apis/mgmt/tenant/)
 
 
 ## Headers

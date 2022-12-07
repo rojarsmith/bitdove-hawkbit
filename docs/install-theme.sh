@@ -33,4 +33,4 @@ fi
 
 echo "[INFO] "
 echo "[INFO] Launch the documentation locally by running 'mvn site' (or 'hugo server' in the docs directory),"
-echo "[INFO] and browse to 'http://localhost:1313/hawkbit/'. "
+echo "[INFO] and browse to 'http://localhost:1313/doc/bitdove/'. "

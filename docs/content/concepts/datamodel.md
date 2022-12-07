@@ -4,16 +4,16 @@ parent: Concepts
 weight: 53
 ---
 
-The hawkBit data model was designed to have enough flexibility to define complex software structures (e.g. operating system, runtimes, apps, different kind of artifacts) on one side and simplicity compared to the capabilities of a full blown configuration management on the other.
+The Bitdove data model was designed to have enough flexibility to define complex software structures (e.g. operating system, runtimes, apps, different kind of artifacts) on one side and simplicity compared to the capabilities of a full blown configuration management on the other.
 <!--more-->
 
-It does define a hierarchy of software that starts with a distribution, which can have (sub-)modules and these may have multiple artifacts. However, it does not consider any kind of dependency definitions between modules or artifacts. As a result, dependency checks - if necessary - have to be done outside hawkBit, i.e. on the device itself or before the entity creation in hawkBit by the origin.
+It does define a hierarchy of software that starts with a distribution, which can have (sub-)modules and these may have multiple artifacts. However, it does not consider any kind of dependency definitions between modules or artifacts. As a result, dependency checks - if necessary - have to be done outside Bitdove, i.e. on the device itself or before the entity creation in Bitdove by the origin.
 
 ## Provisioning Target Definition
 
 A Provisioning Target is a neutral definition that may be an actual real device (e.g. gateway, embedded sensor) or a virtual device (e.g. vehicle, smart home).
 
-The definition in hawkBit might reflect the transactional behavior if necessary on the device side. A vehicle might be updated device by device or as a whole. As a result one way of defining a vehicle in hawkBit could be to have one all inclusive Software Module or one module per (sub-) device.
+The definition in Bitdove might reflect the transactional behavior if necessary on the device side. A vehicle might be updated device by device or as a whole. As a result one way of defining a vehicle in Bitdove could be to have one all inclusive Software Module or one module per (sub-) device.
 
 A Target can have, next to its defined properties (e.g. controller ID, target type, name, description, security token), a generic set of attributes and meta data, both in key:value format. Target attributes are owned and managed by the device whereas target meta data are managed by the operator. If a target is defined to be of a certain target type, then during the assignment of a distribution set, a compatibility check will be performed between the target type and distribution set type.
 
@@ -39,7 +39,7 @@ The public defined entities and their relation which are reflected by the Manage
 
 
 ## Deleting and Archiving Software Modules
-When a user deletes a Software Module, the update server cannot simply remove all the corresponding data. Because when the Software Module is already assigned to a Distribution Set or was assigned to a Target in the past, the hawkBit server has to make sure that remains a clean and full update history for every target. The history contains all information (e.g. name, version) of the software, which was assigned to a specific Target. Obviously storing the binary data of the artifacts is not necessary for the history purpose.
+When a user deletes a Software Module, the update server cannot simply remove all the corresponding data. Because when the Software Module is already assigned to a Distribution Set or was assigned to a Target in the past, the Bitdove server has to make sure that remains a clean and full update history for every target. The history contains all information (e.g. name, version) of the software, which was assigned to a specific Target. Obviously storing the binary data of the artifacts is not necessary for the history purpose.
 
 The delete process which is performed, when there are historical connections to targets is called SoftDelete. This process marks the Software Module as deleted and removes the artifact, but it won't delete the meta data, which describes the SoftwareModule and the associated Artifacts. SoftwareModules, which are marked as delete won't be visible for the user, when he is requesting all SoftwareModules.
 

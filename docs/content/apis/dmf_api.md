@@ -4,7 +4,7 @@ parent: API
 weight: 83
 ---
 
-The DMF API provides Java classes which allows that the message body can be deserialized at runtime into a Java object. Also Java classes can be used to serialize Java objects into JSON bodies to send a message to hawkBit.
+The DMF API provides Java classes which allows that the message body can be deserialized at runtime into a Java object. Also Java classes can be used to serialize Java objects into JSON bodies to send a message to Bitdove.
 Currently, bodies of messages are based on JSON.
 
 <!--more-->
@@ -24,16 +24,16 @@ Queues can also be bound to multiple exchanges.
 **Exchanges** are just publish messages.
 The user decides who can produce on an exchange and who can create bindings on that exchange for delivery to a specific queue.
 
-hawkBit will create all necessary queues, exchanges and bindings for the user, making it easy to get started.
+Bitdove will create all necessary queues, exchanges and bindings for the user, making it easy to get started.
 The exchange name for outgoing messages is **dmf.exchange**.
 
-The user has to set a `reply_to` header (see chapter below), in order to specify the exchange to which hawkBit should reply to.
+The user has to set a `reply_to` header (see chapter below), in order to specify the exchange to which Bitdove should reply to.
 
 The following chapter describes the message body, header and properties.
 
 Note: the DMF protocol was intended to be compatible to other use cases by design. As a result, DMF uses the term **thing** and not **target** but they are actually synonyms in this case.
 
-## Messages sent to hawkBit (Client -> hawkBit)
+## Messages sent to Bitdove (Client -> Bitdove)
 
 
 ### THING_CREATED
@@ -101,7 +101,7 @@ type=THING\_REMOVED <br /> tenant=default <br /> thingId=abc | content\_type=app
 
 ### UPDATE_ATTRIBUTES
 
-Message to update target attributes. This message can be send in response to a REQUEST_ATTRIBUTES_UPDATE event, sent by hawkBit.
+Message to update target attributes. This message can be send in response to a REQUEST_ATTRIBUTES_UPDATE event, sent by Bitdove.
 
 | Header | Description | Type | Mandatory
 |-----------------------------|----------------------------------|-------------------------------------|----------------
@@ -133,7 +133,7 @@ Payload Template:
 }
 ```
 
-The "mode" property specifies the update mode that should be applied. This property is optional. Possible [mode](https://github.com/eclipse/hawkbit/tree/master/hawkbit-dmf/hawkbit-dmf-api/src/main/java/org/eclipse/hawkbit/dmf/json/model/DmfUpdateMode.java) values:
+The "mode" property specifies the update mode that should be applied. This property is optional. Possible mode values:
 
 Value           | Description
 --------------- | ---------------------------------------
@@ -144,7 +144,7 @@ REMOVE          | The target attributes specified in the payload are removed fro
 
 ### UPDATE_ACTION_STATUS
 
-Message to send an action status event to hawkBit.
+Message to send an action status event to Bitdove.
 
 Header | Description                      | Type                                | Mandatory
 ------ | -------------------------------- | ----------------------------------- | -------------------------------------------------------------
@@ -156,7 +156,7 @@ Message Properties | Description                     | Type   | Mandatory
 ------------------ | ------------------------------- | ------ | -------------------------------------------------------------
 content_type       | The content type of the payload | String | true
 
-Payload Template (the Java representation is [ActionUpdateStatus](https://github.com/eclipse/hawkbit/tree/master/hawkbit-dmf/hawkbit-dmf-api/src/main/java/org/eclipse/hawkbit/dmf/json/model/DmfActionUpdateStatus.java)):
+Payload Template:
 
 ```json
 {
@@ -167,7 +167,7 @@ Payload Template (the Java representation is [ActionUpdateStatus](https://github
 }
 ```
 
-Possible [actionStatus](https://github.com/eclipse/hawkbit/tree/master/hawkbit-dmf/hawkbit-dmf-api/src/main/java/org/eclipse/hawkbit/dmf/json/model/DmfActionStatus.java) values:
+Possible actionStatus values:
 
 Value           | Description
 --------------- | ---------------------------------------
@@ -198,7 +198,7 @@ type=EVENT  <br /> tenant=default <br /> topic=UPDATE\_ACTION\_STATUS | content_
 
 ### PING
 
-hawkBit allows DMF clients to check the availability of the DMF service. For this scenario DMF specifies a PING message that can be sent by the client:
+Bitdove allows DMF clients to check the availability of the DMF service. For this scenario DMF specifies a PING message that can be sent by the client:
 
 Header  | Description                      | Type                           | Mandatory
 ------- | -------------------------------- | ------------------------------ | -------------------------------------------------------------
@@ -211,7 +211,7 @@ Message Properties | Description                     | Type   | Mandatory
 correlationId | CorrelationId that allows the client to map a PING request to PING_RESPONSE | String | true
 
 
-## Messages sent by hawkBit (hawkBit -> Client)
+## Messages sent by Bitdove (Bitdove -> Client)
 
 ### CANCEL_DOWNLOAD
 
@@ -283,7 +283,7 @@ type=EVENT  <br /> tenant=default <br /> topic=UPDATE\_ACTION\_STATUS | content_
 
 ### DOWNLOAD_AND_INSTALL or DOWNLOAD
 
-Message sent by hawkBit to initialize an update or download task. Note: in case of a maintenance window configured but not yet active the message will have the topic _DOWNLOAD_ instead of _DOWNLOAD_AND_INSTALL_.
+Message sent by Bitdove to initialize an update or download task. Note: in case of a maintenance window configured but not yet active the message will have the topic _DOWNLOAD_ instead of _DOWNLOAD_AND_INSTALL_.
 
 Header  | Description                      | Type                                | Mandatory
 ------- | -------------------------------- | ----------------------------------- | -------------------------------------------------------------
@@ -296,7 +296,7 @@ Message Properties | Description                     | Type   | Mandatory
 ------------------ | ------------------------------- | ------ | -------------------------------------------------------------
 content_type       | The content type of the payload | String | true
 
-Payload Template (the Java representation is [DmfDownloadAndUpdateRequest](https://github.com/eclipse/hawkbit/tree/master/hawkbit-dmf/hawkbit-dmf-api/src/main/java/org/eclipse/hawkbit/dmf/json/model/DmfDownloadAndUpdateRequest.java)):
+Payload Template :
 
 ```json
 {
@@ -372,7 +372,7 @@ type=EVENT  <br /> tenant=default <br /> thingId=abc  <br /> topic=DOWNLOAD\_AND
 ### MULTI_ACTION
 
 If `multi.assignments.enabled` is enabled, this message is sent instead of DOWNLOAD_AND_INSTALL, DOWNLOAD, or CANCEL_DOWNLOAD
- by hawkBit to initialize update, download, or cancel task(s).
+ by Bitdove to initialize update, download, or cancel task(s).
 
  With weight, one can set the priority to the action. The higher the weight, the higher is the priority of an action.
 
@@ -387,7 +387,7 @@ Message Properties | Description                     | Type   | Mandatory
 ------------------ | ------------------------------- | ------ | -------------------------------------------------------------
 content_type       | The content type of the payload | String | true
 
-Payload Template (the Java representation is [DmfMultiActionRequest](https://github.com/eclipse/hawkbit/tree/master/hawkbit-dmf/hawkbit-dmf-api/src/main/java/org/eclipse/hawkbit/dmf/json/model/DmfMultiActionRequest.java)):
+Payload Template:
 
 ```json
 [{
@@ -536,7 +536,7 @@ type=EVENT  <br /> tenant=default <br /> thingId=abc  <br /> topic=MULTI\_ACTION
 
 ### THING_DELETED
 
-Message sent by hawkBit when a target has been deleted.
+Message sent by Bitdove when a target has been deleted.
 
 Header | Description                                      | Type                         | Mandatory
 -------------- | ------------------------------------------------ | ---------------------------- | -------------------------------------------------------------
@@ -553,7 +553,7 @@ type=THING\_DELETED <br /> tenant=default <br /> thingId=abc                    
 
 ### REQUEST_ATTRIBUTES_UPDATE
 
-Message sent by Eclipse hawkBit when a re-transmission of target attributes is requested.
+Message sent by Eclipse Bitdove when a re-transmission of target attributes is requested.
 
 Header | Description                                      | Type                         | Mandatory
 -------------- | ------------------------------------------------ | ---------------------------- | -------------------------------------------------------------
@@ -571,7 +571,7 @@ type=EVENT <br /> tenant=default <br /> thingId=abc <br /> topic=REQUEST\_ATTRIB
 
 ### PING_RESPONSE
 
-_hawkBit_ will respond to the PING message with a PING_RESPONSE type message that has the same correlationId as the original PING message:
+_Bitdove_ will respond to the PING message with a PING_RESPONSE type message that has the same correlationId as the original PING message:
 
 Header  | Description                      | Type                           | Mandatory
 ------- | -------------------------------- | ------------------------------ | -------------------------------------------------------------

@@ -1,10 +1,10 @@
 ---
-title: What is hawkBit?
+title: What is Bitdove?
 weight: 10
 ---
-Eclipse hawkBit&trade; is an domain-independent back-end framework for rolling out software updates to constrained edge devices as well as more powerful controllers and gateways connected to IP based networking infrastructure.
+Bitdove&copy; is an domain-independent back-end framework for rolling out software updates to constrained edge devices as well as more powerful controllers and gateways connected to IP based networking infrastructure.
 
-![](../images/hawkbit_logo.png)
+![](../images/bitdove_logo_title_512x512.png)
 
 ## Why Software Updates in IoT?
 Having software update capabilities ensures a secure IoT by means that it gives IoT projects a fighting chance against pandora's box that they opened the moment their devices got connected. From that moment on devices are at the forefront of IT security threats many embedded software developers historically never had to face. Shipping for instance a Linux powered device connected to the Internet without any security updates ever applied during its lifetime is kind of a suicidal act these days.
@@ -13,7 +13,7 @@ A more charming argument for software update is that it enables agile developmen
 
 Sometimes Software Update is a business model on its own as it makes devices much more attractive to the customer if they are updateable, i.e. they do not only buy a product because of its current feature set but make also a bet on its future capabilities. In addition new revenue streams may arise from the fact that feature extensions can potentially be monetized (e.g. Apps) without the need to design, manufacture and ship a new device (revision).
 
-## Why hawkBit?
+## Why Bitdove?
 
 **Updating software** (components) on constrained edge devices as well as more powerful controllers and gateways is as mentioned before a **common requirement** in most IoT scenarios.
 

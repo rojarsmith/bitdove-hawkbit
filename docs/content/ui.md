@@ -3,7 +3,7 @@ title: Management UI
 weight: 70
 ---
 
-The hawkBit Management UI provides several views for the different use cases:
+The Bitdove Management UI provides several views for the different use cases:
 
 - _Deployment Management_ view for target administration and manual deployment.
 - _Distribution Management_ view software repository metadata management.

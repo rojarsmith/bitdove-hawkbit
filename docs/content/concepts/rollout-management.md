@@ -9,7 +9,7 @@ Software update operations in large scale IoT scenarios with hundreds of thousan
 
 That includes:
 
-- _Technical Scalability_ by means of horizontal scale of the hawkBit server cluster in the cloud.
+- _Technical Scalability_ by means of horizontal scale of the Bitdove server cluster in the cloud.
 - _Global_ artifact _content delivery_ capacities.
 - _Functional Scalability_ by means of:
   - Secure handling of large volumes of devices at rollout creation time.
@@ -18,7 +18,7 @@ That includes:
 
 - Reporting capabilities for a complete understanding of the rollout progress at each point in time.
 
-Eclipse hawkBit sees these capabilities under the term Rollout Management.
+Bitdove sees these capabilities under the term Rollout Management.
 
 The following capabilities are currently supported by the _Rollout Management_:
 
@@ -52,7 +52,7 @@ The cascading execution of the deployment groups is based on two thresholds that
 
 ## Multi-Assignments (beta)
 
-One of the main paradigms of Eclipse hawkBit is, that a Distribution Set represents the currently installed software of a device. Hence, a device can have only one Distribution Set assigned/installed at a time. With _Multi-Assignments_ enabled, this paradigm shifts. Multi-Assignments allows to assign multiple Distribution Sets to a device simultaneously, without cancelling each other. As a consequence, an operator can trigger multiple campaigns addressing the same devices in parallel. 
+One of the main paradigms of Bitdove is, that a Distribution Set represents the currently installed software of a device. Hence, a device can have only one Distribution Set assigned/installed at a time. With _Multi-Assignments_ enabled, this paradigm shifts. Multi-Assignments allows to assign multiple Distribution Sets to a device simultaneously, without cancelling each other. As a consequence, an operator can trigger multiple campaigns addressing the same devices in parallel. 
 
 ### Action weight
 

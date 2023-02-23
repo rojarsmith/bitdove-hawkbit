@@ -16,7 +16,9 @@ metadataformat = "toml"
 canonifyurls = false
 
 [markup]
-  defaultMarkdownHandler = "blackfriday"
+	[markup.goldmark]
+		[markup.goldmark.extensions]
+			typographer = true
 
 [markup.highlight]
 	codeFences = false
@@ -84,8 +86,12 @@ canonifyurls = false
 	url    = "/apis/"
 	weight = 80
 
-[blackfriday]
-	smartypants	= true
-	fractions = false
-	smartDashes = true
-	plainIDAnchors = true
+[[menu.main]]
+	name   = "Community"
+	url    = "/community/"
+	weight = 90
+
+[[menu.main]]
+	name   = "Release notes"
+	url    = "/release-notes/"
+	weight = 100

@@ -21,6 +21,26 @@ A target might be permitted to download artifacts without authentication (if ena
 
 ## Management API and UI
 
+### Multiple Users
+
+hawkBit optionally supports configuring multiple static users through the application properties. In this case, the user and password Spring security properties are ignored.
+An example configuration is given below.
+
+    hawkbit.server.im.users[0].username=admin
+    hawkbit.server.im.users[0].password={noop}admin
+    hawkbit.server.im.users[0].firstname=Test
+    hawkbit.server.im.users[0].lastname=Admin
+    hawkbit.server.im.users[0].email=admin@test.de
+    hawkbit.server.im.users[0].permissions=ALL
+    
+    hawkbit.server.im.users[1].username=test
+    hawkbit.server.im.users[1].password={noop}test
+    hawkbit.server.im.users[1].firstname=Test
+    hawkbit.server.im.users[1].lastname=Tester
+    hawkbit.server.im.users[1].email=test@tester.com
+    hawkbit.server.im.users[1].permissions=READ_TARGET,UPDATE_TARGET,CREATE_TARGET,DELETE_TARGET
+
+A permissions value of `ALL` will provide that user with all possible permissions. Passwords need to be specified with the used password encoder in brackets. In this example, `noop` is used as the plaintext encoder. For production use, it is recommended to use a hash function designed for passwords such as *bcrypt*. See this [blog post](https://spring.io/blog/2017/11/01/spring-security-5-0-0-rc1-released#password-storage-format) for more information on password encoders in Spring Security.
 ### OpenID Connect
 
 Bitdove supports authentication providers which use the OpenID Connect standard, an authentication layer built on top of the OAuth 2.0 protocol.
@@ -55,10 +75,10 @@ Bitdove supports authentication providers which use the OpenID Connect standard,
 
 ### Permission Matrix for example uses cases that need more than one permission
 
-Use Case                                                                   | Needed permissions
--------------------------------------------------------------------------- | ---------------------------------------------------------------------------
-Search _targets_ by installed or assigned _distribution set_               | READ_REPOSITORY, READ_TARGET
-Assign _DS_ to a _target_                                                  | READ_REPOSITORY, UPDATE_TARGET
-Assign DS to target through a _Rollout_, i.e. _Rollout_ creation and start | READ_REPOSITORY, READ_TARGET, READ_ROLLOUT, CREATE_ROLLOUT, HANDLE_ROLLOUT
-Read _Rollout_ status including its _deployment groups_                    | READ_REPOSITORY, READ_ROLLOUT
-Checks _targets_ inside _Rollout deployment group_                         | READ_REPOSITORY, READ_TARGET, READ_ROLLOUT
+| Use Case                                                                   | Needed permissions                                                         |
+|----------------------------------------------------------------------------|----------------------------------------------------------------------------|
+| Search _targets_ by installed or assigned _distribution set_               | READ_REPOSITORY, READ_TARGET                                               |
+| Assign _DS_ to a _target_                                                  | READ_REPOSITORY, UPDATE_TARGET                                             |
+| Assign DS to target through a _Rollout_, i.e. _Rollout_ creation and start | READ_REPOSITORY, READ_TARGET, READ_ROLLOUT, CREATE_ROLLOUT, HANDLE_ROLLOUT |
+| Read _Rollout_ status including its _deployment groups_                    | READ_REPOSITORY, READ_ROLLOUT                                              |
+| Checks _targets_ inside _Rollout deployment group_                         | READ_REPOSITORY, READ_TARGET, READ_ROLLOUT                                 |

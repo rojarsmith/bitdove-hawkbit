@@ -2,15 +2,15 @@
   <a href="{{ with .Site.BaseURL }}{{ . }}{{ else }}{{ .Site.BaseURL }}{{ end }}" class="project">
     <div class="banner">
       {{ with .Site.Params.logo }}
-        <div class="logo">
-          <img src="{{ $.Site.BaseURL }}{{ . }}">
-        </div>
+      <div class="logo">
+        <img src="{{ $.Site.BaseURL }}{{ . }}">
+      </div>
       {{ end }}
       <div class="name">
-        <strong>{{ .Site.Title }}&trade; {{ with .Site.Params.version }}<span class="version">{{ . }}</span>{{ end }}</strong>
+        <strong>{{ .Site.Title }}&copy; {{ with .Site.Params.version }}<span class="version">{{ . }}</span>{{ end }}</strong>
         {{ with .Scratch.Get "repo_id" }}
-          <br>
-          {{ . }}
+        <br>
+        {{ . }}
         {{ end }}
       </div>
     </div>
@@ -21,7 +21,7 @@
       {{ if (eq (trim .Site.Params.provider " " | lower) "github") | and (isset .Site.Params "repo_url") }}
         <ul class="repo">
           <li class="repo-download">
-            <a href="https://hawkbit.eclipse.org" target="_blank" title="hawkBit Sandbox" data-action="sandbox">
+            <a href="https://hawkbit.eclipseprojects.io" target="_blank" title="hawkBit Sandbox" data-action="sandbox">
               <i class="fas fa-desktop"></i> &nbsp; Sandbox
             </a>
           </li>
@@ -47,23 +47,8 @@
 
         <ul>
           <li>
-            <a href="https://gitter.im/eclipse/hawkbit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge" title="Chat on Gitter" target="_blank">
-              <img src="https://badges.gitter.im/eclipse/hawkbit.svg" />
-            </a>
-          </li>
-          <li>
-            <a href="https://circleci.com/gh/eclipse/hawkbit" title="Circle CI Status" target="_blank">
-              <img src="https://circleci.com/gh/eclipse/hawkbit.svg?style=shield" />
-            </a>
-          </li>
-          <li>
-            <a href="https://sonar.ops.bosch-iot-rollouts.com" title="SonarQube Status" target="_blank">
-              <img src="https://sonar.ops.bosch-iot-rollouts.com/api/badges/gate?key=org.eclipse.hawkbit:hawkbit-parent" />
-            </a>
-          </li>
-          <li>
-            <a href="https://maven-badges.herokuapp.com/maven-central/org.eclipse.hawkbit/hawkbit-parent" title="Maven Central Status" target="_blank">
-              <img src="https://maven-badges.herokuapp.com/maven-central/org.eclipse.hawkbit/hawkbit-parent/badge.svg" />
+            <a href="https://bitdove.net" title="Bitdove Home Site" target="_blank">
+              Bitdove Home
             </a>
           </li>
         </ul>

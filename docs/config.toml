@@ -10,10 +10,9 @@ metadataformat = "toml"
 canonifyurls = false
 
 [markup]
-  defaultMarkdownHandler = "goldmark"
-  [markup.goldmark]
-    [markup.goldmark.renderer]
-      unsafe = true
+	[markup.goldmark]
+		[markup.goldmark.extensions]
+			typographer = true
 
 [markup.highlight]
 	codeFences = false
@@ -86,8 +85,3 @@ canonifyurls = false
 	url    = "/apis/"
 	weight = 80
 
-[blackfriday]
-	smartypants	= true
-	fractions = false
-	smartDashes = true
-	plainIDAnchors = true

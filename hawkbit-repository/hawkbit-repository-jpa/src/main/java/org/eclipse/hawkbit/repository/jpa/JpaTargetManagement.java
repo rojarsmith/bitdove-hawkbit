@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -53,6 +54,7 @@ import org.eclipse.hawkbit.repository.jpa.model.JpaTargetType;
 import org.eclipse.hawkbit.repository.jpa.model.JpaTarget_;
 import org.eclipse.hawkbit.repository.jpa.model.TargetMetadataCompositeKey;
 import org.eclipse.hawkbit.repository.jpa.rsql.RSQLUtility;
+import org.eclipse.hawkbit.repository.jpa.specifications.SpecificationsBuilder;
 import org.eclipse.hawkbit.repository.jpa.specifications.TargetSpecifications;
 import org.eclipse.hawkbit.repository.jpa.utils.QuotaHelper;
 import org.eclipse.hawkbit.repository.model.DistributionSet;
@@ -186,10 +188,10 @@ public class JpaTargetManagement implements TargetManagement {
 
         final JpaTarget updatedTarget = JpaManagementHelper.touch(entityManager, targetRepository, target);
 
-        final List<TargetMetadata> createdMetadata = Collections.unmodifiableList(md.stream()
+        final List<TargetMetadata> createdMetadata = md.stream()
                 .map(meta -> targetMetadataRepository
                         .save(new JpaTargetMetadata(meta.getKey(), meta.getValue(), updatedTarget)))
-                .collect(Collectors.toList()));
+                .collect(Collectors.toUnmodifiableList());
 
         // TargetUpdatedEvent is not sent within the touch() method due to the
         // "lastModifiedAt" field being ignored in JpaTarget
@@ -226,12 +228,12 @@ public class JpaTargetManagement implements TargetManagement {
         // target indirectly
         final JpaTarget target = JpaManagementHelper.touch(entityManager, targetRepository,
                 getByControllerIdAndThrowIfNotFound(controllerId));
-        final JpaTargetMetadata matadata = targetMetadataRepository.save(updatedMetadata);
+        final JpaTargetMetadata metadata = targetMetadataRepository.save(updatedMetadata);
         // target update event is set to ignore "lastModifiedAt" field so it is
         // not send automatically within the touch() method
         eventPublisherHolder.getEventPublisher()
                 .publishEvent(new TargetUpdatedEvent(target, eventPublisherHolder.getApplicationId()));
-        return matadata;
+        return metadata;
     }
 
     @Override
@@ -245,7 +247,7 @@ public class JpaTargetManagement implements TargetManagement {
         final JpaTarget target = JpaManagementHelper.touch(entityManager, targetRepository,
                 getByControllerIdAndThrowIfNotFound(controllerId));
         targetMetadataRepository.deleteById(metadata.getId());
-        // target update event is set to ignore "lastModifiedAt" field so it is
+        // target update event is set to ignore "lastModifiedAt" field, so it is
         // not send automatically within the touch() method
         eventPublisherHolder.getEventPublisher()
                 .publishEvent(new TargetUpdatedEvent(target, eventPublisherHolder.getApplicationId()));
@@ -352,7 +354,7 @@ public class JpaTargetManagement implements TargetManagement {
                         .publishEvent(new TargetDeletedEvent(tenantAware.getCurrentTenant(), target.getId(),
                                 target.getControllerId(),
                                 Optional.ofNullable(target.getAddress()).map(URI::toString).orElse(null),
-                                JpaTarget.class.getName(), eventPublisherHolder.getApplicationId()))));
+                                JpaTarget.class, eventPublisherHolder.getApplicationId()))));
     }
 
     @Override
@@ -415,14 +417,6 @@ public class JpaTargetManagement implements TargetManagement {
     public Slice<Target> findByFilters(final Pageable pageable, final FilterParams filterParams) {
         final List<Specification<JpaTarget>> specList = buildSpecificationList(filterParams);
         return JpaManagementHelper.findAllWithoutCountBySpec(targetRepository, pageable, specList);
-    }
-
-    @Override
-    public long countByFilters(final Collection<TargetUpdateStatus> status, final Boolean overdueState,
-            final String searchText, final Long installedOrAssignedDistributionSetId,
-            final Boolean selectTargetWithNoTag, final String... tagNames) {
-        return countByFilters(new FilterParams(status, overdueState, searchText, installedOrAssignedDistributionSetId,
-                selectTargetWithNoTag, tagNames));
     }
 
     @Override
@@ -588,8 +582,8 @@ public class JpaTargetManagement implements TargetManagement {
 
         allTargets.forEach(target -> target.addTag(tag));
 
-        final List<Target> result = Collections
-                .unmodifiableList(allTargets.stream().map(targetRepository::save).collect(Collectors.toList()));
+        final List<Target> result = allTargets.stream().map(targetRepository::save)
+                .collect(Collectors.toUnmodifiableList());
 
         // No reason to save the tag
         entityManager.detach(tag);
@@ -644,7 +638,7 @@ public class JpaTargetManagement implements TargetManagement {
                 pageable.getPageSize(), Sort.unsorted());
 
         final List<Specification<JpaTarget>> specList = buildSpecificationList(filterParams);
-        specList.add(TargetSpecifications.orderedByLinkedDistributionSet(orderByDistributionId));
+        specList.add(TargetSpecifications.orderedByLinkedDistributionSet(orderByDistributionId, pageable.getSort()));
 
         return JpaManagementHelper.findAllWithoutCountBySpec(targetRepository, unsortedPage, specList);
     }
@@ -748,7 +742,9 @@ public class JpaTargetManagement implements TargetManagement {
     @Retryable(include = {
             ConcurrencyFailureException.class }, maxAttempts = Constants.TX_RT_MAX, backoff = @Backoff(delay = Constants.TX_RT_DELAY))
     public List<Target> create(final Collection<TargetCreate> targets) {
-        return targets.stream().map(this::create).collect(Collectors.toList());
+        final List<JpaTarget> targetList = targets.stream().map(JpaTargetCreate.class::cast).map(JpaTargetCreate::build)
+                .collect(Collectors.toList());
+        return Collections.unmodifiableList(targetRepository.saveAll(targetList));
     }
 
     @Override
@@ -836,7 +832,7 @@ public class JpaTargetManagement implements TargetManagement {
         eventPublisherHolder.getEventPublisher()
                 .publishEvent(new TargetAttributesRequestedEvent(tenantAware.getCurrentTenant(), target.getId(),
                         target.getControllerId(), target.getAddress() != null ? target.getAddress().toString() : null,
-                        JpaTarget.class.getName(), eventPublisherHolder.getApplicationId()));
+                        JpaTarget.class, eventPublisherHolder.getApplicationId()));
     }
 
     @Override
@@ -849,6 +845,25 @@ public class JpaTargetManagement implements TargetManagement {
     @Override
     public boolean existsByControllerId(final String controllerId) {
         return targetRepository.exists(TargetSpecifications.hasControllerId(controllerId));
+    }
+
+    @Override
+    public boolean isTargetMatchingQueryAndDSNotAssignedAndCompatible(final String controllerId,
+            final long distributionSetId, final String targetFilterQuery) {
+        RSQLUtility.validateRsqlFor(targetFilterQuery, TargetFields.class);
+        final DistributionSet ds = distributionSetManagement.get(distributionSetId)
+                .orElseThrow(() -> new EntityNotFoundException(DistributionSet.class, distributionSetId));
+        final Long distSetTypeId = ds.getType().getId();
+        final List<Specification<JpaTarget>> specList = Arrays.asList(
+                RSQLUtility.buildRsqlSpecification(targetFilterQuery, TargetFields.class, virtualPropertyReplacer,
+                        database),
+                TargetSpecifications.hasNotDistributionSetInActions(distributionSetId),
+                TargetSpecifications.isCompatibleWithDistributionSetType(distSetTypeId),
+                TargetSpecifications.hasControllerId(controllerId));
+
+        final Specification<JpaTarget> combinedSpecification = Objects
+                .requireNonNull(SpecificationsBuilder.combineWithAnd(specList));
+        return targetRepository.exists(combinedSpecification);
     }
 
     @Override

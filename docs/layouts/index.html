@@ -1,8 +1,8 @@
 {{ partial "head" . }}
 
 {{ if (eq (trim .Site.Params.provider " " | lower) "github") | and (isset .Site.Params "repo_url") }}
-{{ $repo_id := replace .Site.Params.repo_url "https://github.com/" ""}}
-{{ .Scratch.Set "repo_id" $repo_id }}
+	{{ $repo_id := replace .Site.Params.repo_url "https://github.com/" ""}}
+	{{ .Scratch.Set "repo_id" $repo_id }}
 {{ end }}
 
 <div class="backdrop">
@@ -69,8 +69,8 @@
                     </div>
 
                     <div style="margin-left: 50%;">
-                        <br />
-                        <br />
+                        <br/>
+                        <br/>
                         <img src="images/rollout.png" />
                     </div>
                 </div>
@@ -78,7 +78,7 @@
                 <h2>Package Model</h2>
                 <div style="width: 100%; overflow: hidden;">
                     <div style="width: 50%; float: left;">
-                        <br />
+                        <br/>
                         <img src="images/packagemodel.png" />
                     </div>
 

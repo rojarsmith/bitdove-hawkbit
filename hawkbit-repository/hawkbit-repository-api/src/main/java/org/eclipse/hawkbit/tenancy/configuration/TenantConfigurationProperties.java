@@ -154,11 +154,6 @@ public class TenantConfigurationProperties {
          */
         public static final String USER_CONFIRMATION_ENABLED = "user.confirmation.flow.enabled";
 
-        private String keyName;
-        private String defaultValue = "";
-        private Class<?> dataType = String.class;
-        private Class<? extends TenantConfigurationValidator> validator = TenantConfigurationStringValidator.class;
-
 		private String keyName;
 		private String defaultValue = "";
 		private Class<?> dataType = String.class;

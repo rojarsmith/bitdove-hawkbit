@@ -10,6 +10,7 @@
 package org.eclipse.hawkbit.ui;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -87,7 +88,7 @@ public class UiProperties implements Serializable {
         /**
          * List of available localizations
          */
-        private List<Locale> availableLocals = Collections.singletonList(Locale.ENGLISH);
+        private List<Locale> availableLocals = Arrays.asList(Locale.ENGLISH, Locale.JAPANESE);
 
         /**
          * @return Default locale
@@ -121,6 +122,15 @@ public class UiProperties implements Serializable {
          */
         public void setAvailableLocals(final List<Locale> availableLocals) {
             this.availableLocals = availableLocals;
+        }
+        
+        public boolean containsLocal(final Locale local) {
+        	for(Locale l : this.availableLocals) {
+        		if(l.getLanguage().toLowerCase().equals(local.getLanguage().toLowerCase())) {
+        			return true;
+        		}
+        	}
+            return false;
         }
     }
 

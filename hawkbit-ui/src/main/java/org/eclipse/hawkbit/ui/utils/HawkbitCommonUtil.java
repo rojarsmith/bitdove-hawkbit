@@ -100,12 +100,17 @@ public final class HawkbitCommonUtil {
      */
     public static Locale getLocaleToBeUsed(final UiProperties.Localization localizationProperties,
             final Locale desiredLocale) {
-        final List<Locale> availableLocals = localizationProperties.getAvailableLocals();
         // ckeck if language code of UI locale matches an available local.
         // Country, region and variant are ignored. "availableLocals" must only
         // contain language codes without country or other extensions.
-        if (availableLocals.contains(desiredLocale)) {
-            return desiredLocale;
+        if(localizationProperties.containsLocal(desiredLocale)) {
+        	if("ja".equals(desiredLocale.getLanguage().toLowerCase())) {
+        		return new Locale.Builder()
+            			.setLanguage("ja")
+            			.setRegion("JP")
+            			.build();
+        	}
+        	return desiredLocale;
         }
         return localizationProperties.getDefaultLocal();
     }
@@ -121,8 +126,10 @@ public final class HawkbitCommonUtil {
      *            Localization message source
      */
     public static void initLocalization(final UI ui, final Localization localizationProperties,
+    		final Locale desiredLocale,
             final VaadinMessageSource i18n) {
-        ui.setLocale(HawkbitCommonUtil.getLocaleToBeUsed(localizationProperties, ui.getSession().getLocale()));
+    	ui.setLocale(HawkbitCommonUtil.getLocaleToBeUsed(localizationProperties, desiredLocale));
+//        ui.setLocale(HawkbitCommonUtil.getLocaleToBeUsed(localizationProperties, ui.getSession().getLocale()));
         ui.getReconnectDialogConfiguration()
                 .setDialogText(i18n.getMessage(UIMessageIdProvider.VAADIN_SYSTEM_TRYINGRECONNECT));
     }

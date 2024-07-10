@@ -115,8 +115,8 @@ public abstract class AbstractHawkbitLoginUI extends UI {
     }
 
     @Override
-    protected void init(final VaadinRequest request) {
-        HawkbitCommonUtil.initLocalization(this, uiProperties.getLocalization(), i18n);
+    protected void init(final VaadinRequest request) {    	
+        HawkbitCommonUtil.initLocalization(this, uiProperties.getLocalization(), request.getLocale(), i18n);
 
         params = UriComponentsBuilder.fromUri(Page.getCurrent().getLocation()).build().getQueryParams();
 

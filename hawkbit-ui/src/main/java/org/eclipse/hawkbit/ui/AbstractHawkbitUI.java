@@ -140,7 +140,7 @@ public abstract class AbstractHawkbitUI extends UI implements DetachListener {
         rootLayout.setSpacing(false);
         rootLayout.setSizeFull();
 
-        HawkbitCommonUtil.initLocalization(this, uiProperties.getLocalization(), i18n);
+        HawkbitCommonUtil.initLocalization(this, uiProperties.getLocalization(), vaadinRequest.getLocale(), i18n);
         SPDateTimeUtil.initializeFixedTimeZoneProperty(uiProperties.getFixedTimeZone());
 
         dashboardMenu.init();

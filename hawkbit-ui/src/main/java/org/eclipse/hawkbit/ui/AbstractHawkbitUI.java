@@ -10,6 +10,12 @@
 package org.eclipse.hawkbit.ui;
 
 import com.vaadin.shared.ui.ContentMode;
+
+import java.util.Locale;
+import java.util.Optional;
+
+import javax.servlet.http.Cookie;
+
 import org.eclipse.hawkbit.ui.components.NotificationUnreadButton;
 import org.eclipse.hawkbit.ui.error.ErrorView;
 import org.eclipse.hawkbit.ui.menu.DashboardEvent.PostViewChangeEvent;
@@ -139,8 +145,26 @@ public abstract class AbstractHawkbitUI extends UI implements DetachListener {
         rootLayout.setMargin(false);
         rootLayout.setSpacing(false);
         rootLayout.setSizeFull();
-
-        HawkbitCommonUtil.initLocalization(this, uiProperties.getLocalization(), vaadinRequest.getLocale(), i18n);
+        
+    	Locale desiredLocale = vaadinRequest.getLocale();
+    	
+    	Cookie[] cookies = vaadinRequest.getCookies();
+    	boolean cookiesEnabled = cookies != null;
+    	Optional<String> cookieLanguage = Optional.empty();
+    	if (cookiesEnabled) {
+    		for (Cookie cookie : cookies) {
+    			if("language".equals(cookie.getName())) {
+					cookieLanguage = Optional.of(cookie.getValue());
+					Locale tl = new Locale.Builder()
+							.setLanguage(cookie.getValue())
+							.build();
+					desiredLocale = HawkbitCommonUtil.getLocaleToBeUsed(uiProperties.getLocalization(), tl);
+					break;
+				}
+    		}
+    	}
+        
+        HawkbitCommonUtil.initLocalization(this, uiProperties.getLocalization(), desiredLocale, i18n);
         SPDateTimeUtil.initializeFixedTimeZoneProperty(uiProperties.getFixedTimeZone());
 
         dashboardMenu.init();

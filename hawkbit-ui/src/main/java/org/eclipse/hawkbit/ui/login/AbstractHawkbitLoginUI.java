@@ -16,6 +16,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
+
+import javax.servlet.http.Cookie;
 
 import org.eclipse.hawkbit.im.authentication.MultitenancyIndicator;
 import org.eclipse.hawkbit.im.authentication.TenantUserPasswordAuthenticationToken;
@@ -54,6 +57,7 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.Page;
 import com.vaadin.server.Responsive;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinService;
 import com.vaadin.server.WebBrowser;
 import com.vaadin.shared.Position;
 import com.vaadin.shared.ui.ContentMode;
@@ -101,6 +105,7 @@ public abstract class AbstractHawkbitLoginUI extends UI {
     private final boolean isDemo;
 
     private ComboBox<ProxyTypeInfo> language;
+    private Locale selectedLocale;
     private TextField username;
     private TextField tenant;
     private PasswordField password;
@@ -124,8 +129,34 @@ public abstract class AbstractHawkbitLoginUI extends UI {
     }
 
     @Override
-    protected void init(final VaadinRequest request) {    	
-        HawkbitCommonUtil.initLocalization(this, uiProperties.getLocalization(), request.getLocale(), i18n);
+    protected void init(final VaadinRequest request) {    
+    	Locale desiredLocale = request.getLocale();
+    	
+    	Cookie[] cookies = request.getCookies();
+    	boolean cookiesEnabled = cookies != null;
+    	Optional<String> cookieLanguage = Optional.empty();
+    	if (cookiesEnabled) {
+    		for (Cookie cookie : cookies) {
+    			if("language".equals(cookie.getName())) {
+					cookieLanguage = Optional.of(cookie.getValue());
+					Locale tl = new Locale.Builder()
+							.setLanguage(cookie.getValue())
+							.build();
+					desiredLocale = HawkbitCommonUtil.getLocaleToBeUsed(uiProperties.getLocalization(), tl);
+					break;
+				}
+    		}
+    	}
+    	if(cookieLanguage.isEmpty()) {
+    		final Locale cookiesLocale = HawkbitCommonUtil.getLocaleToBeUsed(uiProperties.getLocalization(), request.getLocale());
+    		Cookie cookie = new Cookie("language", cookiesLocale.getLanguage());
+            cookie.setMaxAge(60 * 60 * 24 * 365); // Set cookie to expire in 365 day
+            cookie.setPath("/"); // Make cookie available for the entire application
+            VaadinService.getCurrentResponse().addCookie(cookie);
+    	}
+    	selectedLocale = desiredLocale;
+
+        HawkbitCommonUtil.initLocalization(this, uiProperties.getLocalization(), desiredLocale, i18n);
 
         params = UriComponentsBuilder.fromUri(Page.getCurrent().getLocation()).build().getQueryParams();
 
@@ -218,6 +249,7 @@ public abstract class AbstractHawkbitLoginUI extends UI {
     	language.setItemCaptionGenerator(ProxyTypeInfo::getName);
     	List<Locale> locales = uiProperties.getLocalization().getAvailableLocals();
     	List<ProxyTypeInfo> items = new ArrayList<>();
+    	ProxyTypeInfo selectedItem = new ProxyTypeInfo();
     	for(int i = 0; i < locales.size(); i++) {
     		String displayLanguage;
     		if(locales.get(i).toLanguageTag().equals("ja")) {
@@ -225,17 +257,30 @@ public abstract class AbstractHawkbitLoginUI extends UI {
     		}
     		else {
     			displayLanguage = "English";
-    		}    		
-    		items.add(new ProxyTypeInfo(
+    		}
+    		ProxyTypeInfo item = new ProxyTypeInfo(
     				Long.valueOf(i),
     				displayLanguage,
-    				locales.get(i).toLanguageTag()));
+    				locales.get(i).toLanguageTag());
+    		items.add(item);
+    		if(item.getKey().equals(selectedLocale.getLanguage())) {
+    			selectedItem = item;
+    		}
     	}
     	ListDataProvider<ProxyTypeInfo> dataProvider = new ListDataProvider<>(items);
     	language.setDataProvider(dataProvider);
     	if (!items.isEmpty()) {
-    		language.setValue(items.get(0));
+    		language.setValue(selectedItem);
     	}
+    	
+    	language.addValueChangeListener(event -> {
+    		ProxyTypeInfo selected = event.getValue();
+    		Cookie cookie = new Cookie("language", selected.getKey());
+            cookie.setMaxAge(60 * 60 * 24); // Set cookie to expire in 1 day
+            cookie.setPath("/"); // Make cookie available for the entire application
+            VaadinService.getCurrentResponse().addCookie(cookie);
+            Page.getCurrent().reload();
+    	});
     }
     
     private void buildTenantField() {

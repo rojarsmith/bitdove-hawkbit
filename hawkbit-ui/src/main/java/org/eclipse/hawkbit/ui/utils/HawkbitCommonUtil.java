@@ -129,7 +129,6 @@ public final class HawkbitCommonUtil {
     		final Locale desiredLocale,
             final VaadinMessageSource i18n) {
     	ui.setLocale(HawkbitCommonUtil.getLocaleToBeUsed(localizationProperties, desiredLocale));
-//        ui.setLocale(HawkbitCommonUtil.getLocaleToBeUsed(localizationProperties, ui.getSession().getLocale()));
         ui.getReconnectDialogConfiguration()
                 .setDialogText(i18n.getMessage(UIMessageIdProvider.VAADIN_SYSTEM_TRYINGRECONNECT));
     }

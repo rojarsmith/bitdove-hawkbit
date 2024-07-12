@@ -1,4 +1,6 @@
 /**
+ * Copyright (c) 2024 Rojar Smith
+ * 
  * Copyright (c) 2015 Bosch Software Innovations GmbH and others
  *
  * This program and the accompanying materials are made
@@ -11,12 +13,16 @@ package org.eclipse.hawkbit.ui.login;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import org.eclipse.hawkbit.im.authentication.MultitenancyIndicator;
 import org.eclipse.hawkbit.im.authentication.TenantUserPasswordAuthenticationToken;
 import org.eclipse.hawkbit.ui.AbstractHawkbitUI;
 import org.eclipse.hawkbit.ui.UiProperties;
 import org.eclipse.hawkbit.ui.common.data.proxies.ProxyLoginCredentials;
+import org.eclipse.hawkbit.ui.common.data.proxies.ProxyTypeInfo;
 import org.eclipse.hawkbit.ui.common.notification.ParallelNotification;
 import org.eclipse.hawkbit.ui.components.SPUIComponentProvider;
 import org.eclipse.hawkbit.ui.themes.HawkbitTheme;
@@ -42,6 +48,7 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.data.Binder;
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.Page;
@@ -52,6 +59,7 @@ import com.vaadin.shared.Position;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomLayout;
@@ -92,6 +100,7 @@ public abstract class AbstractHawkbitLoginUI extends UI {
 
     private final boolean isDemo;
 
+    private ComboBox<ProxyTypeInfo> language;
     private TextField username;
     private TextField tenant;
     private PasswordField password;
@@ -183,6 +192,7 @@ public abstract class AbstractHawkbitLoginUI extends UI {
         fields.setSpacing(true);
         fields.addStyleName("fields");
 
+        buildLanguageComboBox();
         buildTenantField();
         buildUserField();
         buildPasswordField();
@@ -191,7 +201,7 @@ public abstract class AbstractHawkbitLoginUI extends UI {
         if (multiTenancyIndicator.isMultiTenancySupported()) {
             fields.addComponents(tenant, username, password, signIn);
         } else {
-            fields.addComponents(username, password, signIn);
+            fields.addComponents(language, username, password, signIn);
         }
 
         fields.setComponentAlignment(signIn, Alignment.BOTTOM_LEFT);
@@ -199,6 +209,35 @@ public abstract class AbstractHawkbitLoginUI extends UI {
         return fields;
     }
 
+    private void buildLanguageComboBox() {
+    	language = new ComboBox<>();
+    	language.setId(UIComponentIdProvider.SYSTEM_CONFIGURATION_LANGUAGE_COMBOBOX);
+    	language.setCaption(i18n.getMessage("label.login.language"));
+    	language.setEmptySelectionAllowed(false);
+    	language.setTextInputAllowed(false);
+    	language.setItemCaptionGenerator(ProxyTypeInfo::getName);
+    	List<Locale> locales = uiProperties.getLocalization().getAvailableLocals();
+    	List<ProxyTypeInfo> items = new ArrayList<>();
+    	for(int i = 0; i < locales.size(); i++) {
+    		String displayLanguage;
+    		if(locales.get(i).toLanguageTag().equals("ja")) {
+    			displayLanguage = "日本語";
+    		}
+    		else {
+    			displayLanguage = "English";
+    		}    		
+    		items.add(new ProxyTypeInfo(
+    				Long.valueOf(i),
+    				displayLanguage,
+    				locales.get(i).toLanguageTag()));
+    	}
+    	ListDataProvider<ProxyTypeInfo> dataProvider = new ListDataProvider<>(items);
+    	language.setDataProvider(dataProvider);
+    	if (!items.isEmpty()) {
+    		language.setValue(items.get(0));
+    	}
+    }
+    
     private void buildTenantField() {
         if (multiTenancyIndicator.isMultiTenancySupported()) {
             tenant = new TextField(i18n.getMessage("label.login.tenant"));

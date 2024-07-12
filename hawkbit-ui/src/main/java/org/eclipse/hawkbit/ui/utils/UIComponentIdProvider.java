@@ -619,6 +619,11 @@ public final class UIComponentIdProvider {
      * Combobox id.
      */
     public static final String SYSTEM_CONFIGURATION_DEFAULTDIS_COMBOBOX = "default.disset.combobox";
+    
+    /**
+     * Combobox language.
+     */
+    public static final String SYSTEM_CONFIGURATION_LANGUAGE_COMBOBOX = "system.configuration.language.combobox";
 
     /**
      * Polling system configuration.

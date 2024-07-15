@@ -24,6 +24,7 @@ import org.eclipse.hawkbit.im.authentication.MultitenancyIndicator;
 import org.eclipse.hawkbit.im.authentication.TenantUserPasswordAuthenticationToken;
 import org.eclipse.hawkbit.ui.AbstractHawkbitUI;
 import org.eclipse.hawkbit.ui.UiProperties;
+import org.eclipse.hawkbit.ui.common.data.providers.LanguageMemoryDataProvider;
 import org.eclipse.hawkbit.ui.common.data.proxies.ProxyLoginCredentials;
 import org.eclipse.hawkbit.ui.common.data.proxies.ProxyTypeInfo;
 import org.eclipse.hawkbit.ui.common.notification.ParallelNotification;
@@ -247,29 +248,11 @@ public abstract class AbstractHawkbitLoginUI extends UI {
     	language.setEmptySelectionAllowed(false);
     	language.setTextInputAllowed(false);
     	language.setItemCaptionGenerator(ProxyTypeInfo::getName);
-    	List<Locale> locales = uiProperties.getLocalization().getAvailableLocals();
-    	List<ProxyTypeInfo> items = new ArrayList<>();
     	ProxyTypeInfo selectedItem = new ProxyTypeInfo();
-    	for(int i = 0; i < locales.size(); i++) {
-    		String displayLanguage;
-    		if(locales.get(i).toLanguageTag().equals("ja")) {
-    			displayLanguage = "日本語";
-    		}
-    		else {
-    			displayLanguage = "English";
-    		}
-    		ProxyTypeInfo item = new ProxyTypeInfo(
-    				Long.valueOf(i),
-    				displayLanguage,
-    				locales.get(i).toLanguageTag());
-    		items.add(item);
-    		if(item.getKey().equals(selectedLocale.getLanguage())) {
-    			selectedItem = item;
-    		}
-    	}
-    	ListDataProvider<ProxyTypeInfo> dataProvider = new ListDataProvider<>(items);
+    	LanguageMemoryDataProvider<ProxyTypeInfo> dataProvider = new LanguageMemoryDataProvider<>(uiProperties);
+    	selectedItem = dataProvider.getSelected(selectedLocale);
     	language.setDataProvider(dataProvider);
-    	if (!items.isEmpty()) {
+    	if(dataProvider.getItems().size() >= 1) {
     		language.setValue(selectedItem);
     	}
     	
